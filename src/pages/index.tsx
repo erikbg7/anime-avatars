@@ -1,13 +1,24 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import { Inter } from '@next/font/google';
+
 import styles from '@/styles/Home.module.css';
 import { trpc } from '../utils/trpc';
+import { getStripe } from '@/utils/stripe';
+import localFont from '@next/font/local';
 
-const inter = Inter({ subsets: ['latin'] });
+// import { getStripe } from '@/utils/stripe';
+
+const shibuya = localFont({ src: '../fonts/Shibuya-Zone.woff2' });
 
 export default function Home() {
   const { data } = trpc.hello.sayHello.useQuery({ text: 'client' });
+  const purchase = trpc.payments.purchase.useMutation();
+
+  const handlePurchase = async () => {
+    const stripe = await getStripe();
+    const { id } = await purchase.mutateAsync();
+    stripe?.redirectToCheckout({ sessionId: id });
+  };
 
   return (
     <>
@@ -18,98 +29,89 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>
-          <p className="text-2xl">{!!data && <p>{data.greeting}</p>}</p>
+        <div className="hero min-h-screen" style={{ backgroundImage: `url("/landing.jpeg")` }}>
+          <div className="hero-overlay bg-opacity-80"></div>
+          {/* <img src="/japan.png" className="max-w-sm"></img> */}
+          <div className="hero-content text-center text-white">
+            <div className="max-w-lg">
+              <h1 className="flex flex-col mb-5 text-7xl font-bold">
+                <span>Create your</span>
+                <span
+                  className={`${shibuya.className} tracking-wider text-9xl text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mt-4`}
+                >
+                  ANIME
+                </span>
+                <span>Profile Pictures</span>
+              </h1>
+              <div className="my-5 font-semibold">
+                <p className="text-lg my-2">🔒 Secure Payment</p>
+                <p className="text-lg my-2">✨ Highest possible quality</p>
+                <p className="text-lg my-2">🌀 Get 5 different anime styles</p>
+                <p className="text-lg my-2">🎆 Profile pictures for your socials</p>
+              </div>
+              <div>ProductHunt IndieHackers stability.ai TikTok Instagram</div>
+            </div>
+          </div>
+          <div className="fixed bottom-0 w-full text-center border-t border-slate-500 bg-slate-900 p-6">
+            <button onClick={handlePurchase} className="btn btn-primary w-80">
+              Get Started
+            </button>
+          </div>
+        </div>
+        <section>
+          <div className="w-[60%] mx-auto text-center p-12">
+            <h2 className="text-3xl font-bold mb-6">🌀 Get 5 different anime styles</h2>
+            <p>
+              After payment you can select up to 15 styles you want from the ones below. For each
+              style we'll generate 8 avatars, for a total of 120+ avatars. With AI, results can
+              vary, so we generate a lot of avatars so you can pick the best ones! Transform
+              yourself (or your dog, cat, or you and your bf/gf as a couple) into desert punk
+              warriors, a zombie at Halloween, an Instagram model in the jungle, the main character
+              in a video game to a fashion model. It's up to you to decide who you want to become!
+              Your AI avatars will look just like you but in the styles you select.
+            </p>
+          </div>
+        </section>
+        <section className="w-[60%] mx-auto text-center p-12">
+          <h2 className="text-3xl font-bold mb-6">❓ Frequently Asked Questions</h2>
           <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
+            <h3 className="text-2xl font-semibold mb-4">What type of photos should I upload?</h3>
+            <p>
+              We recommend 10 close ups of your face, 3 photos of your side profile, 5 photos from
+              your chest and up and 3 full body photos. The more different your photos are from each
+              other the better! Make sure there's no other people or animals in your photos than the
+              main subject (you, or your dog, or cat, or your bf/gf if you selected couple). Photos
+              with a variety of facial expressions, locations, backgrouns and perspecitves are
+              better. Don't just look into the camera, also look away! High quality photos work
+              better. If you like to wear makeup, make sure it's minimal in your photos, or it may
+              be exaggerated in the avatars. Please don't upload nudes. Swimwear and underwear is
+              fine
+            </p>
           </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
+          <h3 className="text-2xl font-semibold mb-4">
+            What file formats of photos do you accept?
+          </h3>
+          <p>
+            Right now we support JPG, PNG, WebP, HEIC, JFIF, TIFF and RAW. We don't support AVIF or
+            GIF!
+          </p>
+          <h3 className="text-2xl font-semibold mb-4">
+            How long will it take to receive my avatars?
+          </h3>
+          <p>
+            Right now it'll take about 37 minutes (based on current processing times) to generate
+            your avatars.
+          </p>
+          <h3 className="text-2xl font-semibold mb-4">What will you do with my photos?</h3>
+          <p>
+            Great question. We only use them to train the AI model, render your avatars and then
+            delete both the input photos and the AI model from our servers and the GPU API's servers
+            (where it's processed) within 24 hours. Beware of other apps that generate profile
+            photos and avatars as most store your data forever to mine it which means they can
+            generate any image (like deepfakes) with your face in it forever. Some are even
+            affiliated with foreign governments with might get your data!
+          </p>
+        </section>
       </main>
     </>
   );

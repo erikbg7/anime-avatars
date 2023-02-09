@@ -1,0 +1,55 @@
+import { procedure, router } from '@/server/trpc';
+import { z } from 'zod';
+
+export function createPaymentsService() {
+  return router({
+    // logIn: procedure.mutation(async ({ ctx }) => {
+    //   const res = await ctx.supabase.auth.signInWithOAuth({
+    //     provider: 'discord',
+    //   });
+    //   console.log('res');
+    // }),
+    retrieve: procedure
+      .input(
+        z.object({
+          sessionId: z.string(),
+        })
+      )
+      .query(async ({ ctx, input }) => {
+        console.log('RETRIEVE');
+        const { stripe } = ctx;
+        const session = await stripe.checkout.sessions.retrieve(input.sessionId);
+
+        console.log({ session });
+
+        return session;
+      }),
+    purchase: procedure.mutation(async ({ ctx }) => {
+      console.log('PURCHASE');
+      const { stripe } = ctx;
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: 'Stubborn Attachments',
+                images: ['https://i.imgur.com/EHyR2nP.png'],
+              },
+              unit_amount: 2000,
+            },
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        success_url: 'http://localhost:3000/payment/{CHECKOUT_SESSION_ID}',
+        cancel_url: 'http://localhost:3000/cancel',
+      });
+
+      console.log({ session });
+
+      return session;
+    }),
+  });
+}
