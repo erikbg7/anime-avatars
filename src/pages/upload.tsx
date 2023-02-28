@@ -1,8 +1,20 @@
-import Layout from '@/components/layout';
 import { useEffect, useState } from 'react';
+import Layout from '@/components/layout';
+import { trpc } from '@/utils/trpc';
 
 export default function Upload() {
   const [preview, setPreview] = useState<string>();
+  const diffusion = trpc.diffusion.create.useMutation();
+  // const { data: result } = trpc.diffusion.retrieve.useQuery();
+
+  const handleDiffusion = async () => {
+    const res = await diffusion.mutateAsync({
+      prompt: 'anima ears, lightnings on background',
+      init_image:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Portrait_of_a_woman_made_by_Stable_Diffusion.webp/512px-Portrait_of_a_woman_made_by_Stable_Diffusion.webp.png',
+    });
+    console.log({ res });
+  };
 
   return (
     <Layout>
@@ -16,7 +28,9 @@ export default function Upload() {
             <ImageInput setImage={setPreview} />
           </div>
         </div>
-        {/* <button className="btn btn-primary btn-block">Button</button> */}
+        <button className="btn btn-primary btn-block" onClick={handleDiffusion}>
+          Post
+        </button>
       </div>
     </Layout>
   );

@@ -5,13 +5,11 @@ import styles from '@/styles/Home.module.css';
 import { trpc } from '../utils/trpc';
 import { getStripe } from '@/utils/stripe';
 import localFont from '@next/font/local';
-
-// import { getStripe } from '@/utils/stripe';
+import Demo from '@/components/Demo';
 
 const shibuya = localFont({ src: '../fonts/go3.ttf' });
 
 export default function Home() {
-  const { data } = trpc.hello.sayHello.useQuery({ text: 'client' });
   const purchase = trpc.payments.purchase.useMutation();
 
   const handlePurchase = async () => {
@@ -29,8 +27,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
+        <div className="fixed top-4 left-4 flex items-center glow-pulse">
+          <div className="relative w-8 h-8">
+            <Image src="/logo2.svg" alt="logo" fill />
+          </div>
+          <span className={`${shibuya.className} text-2xl text-white mx-3`}>ANIME AI</span>
+        </div>
         <div className="hero min-h-screen" style={{ backgroundImage: `url("/night-bg.gif")` }}>
-          <div className="hero-overlay bg-black bg-opacity-70"></div>
+          <div className="hero-overlay bg-black bg-opacity-60"></div>
           {/* <img src="/japan.png" className="max-w-sm"></img> */}
           <div className="hero-content text-center text-white flex flex-col">
             <div className="max-w-lg">
@@ -79,9 +83,9 @@ export default function Home() {
               />
             </div>
           </div>
-          <div className="fixed bottom-0 w-full text-center border-t border-slate-500 bg-slate-900 p-6">
+          <div className="fixed bottom-0 w-full text-center bg-brand border-t border-slate-500 p-6 z-50">
             <button onClick={handlePurchase} className="cta btn btn-primary glow w-80">
-              Get Started
+              Get Started - 9.99€
             </button>
           </div>
         </div>
@@ -97,8 +101,10 @@ export default function Home() {
               in a video game to a fashion model. It's up to you to decide who you want to become!
               Your AI avatars will look just like you but in the styles you select.
             </p>
+            <Demo />
           </div>
         </section>
+        <hr className="w-full border-slate-500" />
         <section className="w-[60%] mx-auto text-center p-12">
           <h2 className="text-3xl font-bold mb-6">❓ Frequently Asked Questions</h2>
           <div>

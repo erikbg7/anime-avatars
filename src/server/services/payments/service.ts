@@ -3,12 +3,6 @@ import { z } from 'zod';
 
 export function createPaymentsService() {
   return router({
-    // logIn: procedure.mutation(async ({ ctx }) => {
-    //   const res = await ctx.supabase.auth.signInWithOAuth({
-    //     provider: 'discord',
-    //   });
-    //   console.log('res');
-    // }),
     retrieve: procedure
       .input(
         z.object({
