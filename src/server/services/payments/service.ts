@@ -35,7 +35,9 @@ export function createPaymentsService() {
               currency: 'usd',
               product_data: {
                 name: 'Stubborn Attachments',
-                images: ['https://i.imgur.com/EHyR2nP.png'],
+                images: [
+                  'https://ogoexfvkwxcwmjqveeet.supabase.co/storage/v1/object/sign/images/ezgif.com-crop.gif?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJpbWFnZXMvZXpnaWYuY29tLWNyb3AuZ2lmIiwiaWF0IjoxNjc3NTE5MzM0LCJleHAiOjE2ODAxMTEzMzR9.5uAcy4VXjwDz8KE7NmuddmW4Tc5k4Wo5-oUCwQJPq9E&t=2023-02-27T17%3A35%3A34.739Z',
+                ],
               },
               unit_amount: 2000,
             },

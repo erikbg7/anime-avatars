@@ -8,7 +8,7 @@ import localFont from '@next/font/local';
 
 // import { getStripe } from '@/utils/stripe';
 
-const shibuya = localFont({ src: '../fonts/Shibuya-Zone.woff2' });
+const shibuya = localFont({ src: '../fonts/go3.ttf' });
 
 export default function Home() {
   const { data } = trpc.hello.sayHello.useQuery({ text: 'client' });
@@ -29,31 +29,58 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className="hero min-h-screen" style={{ backgroundImage: `url("/landing.jpeg")` }}>
-          <div className="hero-overlay bg-opacity-80"></div>
+        <div className="hero min-h-screen" style={{ backgroundImage: `url("/night-bg.gif")` }}>
+          <div className="hero-overlay bg-black bg-opacity-70"></div>
           {/* <img src="/japan.png" className="max-w-sm"></img> */}
-          <div className="hero-content text-center text-white">
+          <div className="hero-content text-center text-white flex flex-col">
             <div className="max-w-lg">
-              <h1 className="flex flex-col mb-5 text-7xl font-bold">
+              <h1 className={`flex flex-col mb-6 text-6xl font-semibold ${shibuya.className}`}>
                 <span>Create your</span>
                 <span
-                  className={`${shibuya.className} tracking-wider text-9xl text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mt-4`}
+                  className={`${shibuya.className} tracking-wider text-7xl text-transparent bg-clip-text bg-gradient-to-b from-purple-400 to-pink-600 mt-4`}
                 >
-                  ANIME
+                  ANIME STYLE
                 </span>
                 <span>Profile Pictures</span>
               </h1>
-              <div className="my-5 font-semibold">
+              <div className="my-5">
                 <p className="text-lg my-2">🔒 Secure Payment</p>
                 <p className="text-lg my-2">✨ Highest possible quality</p>
                 <p className="text-lg my-2">🌀 Get 5 different anime styles</p>
                 <p className="text-lg my-2">🎆 Profile pictures for your socials</p>
               </div>
-              <div>ProductHunt IndieHackers stability.ai TikTok Instagram</div>
+            </div>
+            <div className="flex items-center mt-24">
+              <p className="text-xs opacity-50 mr-6">as seen on</p>
+              <img
+                loading="lazy"
+                className="h-6 mr-6 filter-to-white"
+                src="https://avatarai.me/assets/techcrunch.png?1670866305"
+              />
+              <img
+                loading="lazy"
+                className="h-6 mr-6 filter-to-white"
+                src="https://avatarai.me/assets/stability-ai.png?1671498407"
+              />
+              <img
+                loading="lazy"
+                className="h-6 mr-6 filter-to-white"
+                src="https://avatarai.me/assets/fstoppers.png?1670867107"
+              />
+              <img
+                loading="lazy"
+                className="h-6 mr-6 filter-to-white"
+                src="https://avatarai.me/assets/tiktok.png?1670866305"
+              />
+              <img
+                loading="lazy"
+                className="h-6 mr-6 mt-1 filter-to-white"
+                src="https://avatarai.me/assets/instagram.png?1670870083"
+              />
             </div>
           </div>
           <div className="fixed bottom-0 w-full text-center border-t border-slate-500 bg-slate-900 p-6">
-            <button onClick={handlePurchase} className="btn btn-primary w-80">
+            <button onClick={handlePurchase} className="cta btn btn-primary glow w-80">
               Get Started
             </button>
           </div>
