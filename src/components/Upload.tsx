@@ -1,19 +1,45 @@
 import { useEffect, useState } from 'react';
 import Layout from '@/components/layout';
 import { trpc } from '@/utils/trpc';
+import { createClient } from '@supabase/supabase-js';
 
-export default function Upload() {
+type Props = { session_id: string; setBaseImageUrl: (url: string) => void };
+
+export default function Upload({ session_id, setBaseImageUrl }: Props) {
   const [preview, setPreview] = useState<string>();
-  const diffusion = trpc.diffusion.create.useMutation();
-  // const { data: result } = trpc.diffusion.retrieve.useQuery();
+  const [selectedFile, setSelectedFile] = useState<File>();
+
+  const getToken = trpc.diffusion.getUploadToken.useMutation();
+
+  useEffect(() => {
+    if (!selectedFile) {
+      setPreview(undefined);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(selectedFile);
+    setPreview(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedFile]);
 
   const handleDiffusion = async () => {
-    const res = await diffusion.mutateAsync({
-      prompt: 'anima ears, lightnings on background',
-      init_image:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Portrait_of_a_woman_made_by_Stable_Diffusion.webp/512px-Portrait_of_a_woman_made_by_Stable_Diffusion.webp.png',
-    });
-    console.log({ res });
+    if (!selectedFile) return;
+    const token = await getToken.mutateAsync({ id: session_id });
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
+    const supabase = createClient(supabaseUrl, token);
+
+    const arrayBuffer = await selectedFile.arrayBuffer();
+    const blob = new Blob([arrayBuffer], { type: selectedFile.type });
+
+    await supabase.storage.from('images').upload(session_id + '/' + selectedFile.name, blob);
+    const { data, error } = await supabase.storage
+      .from('images')
+      .createSignedUrl(selectedFile.name, 3600);
+
+    if (!error) {
+      setBaseImageUrl(data.signedUrl);
+    }
   };
 
   return (
@@ -25,7 +51,7 @@ export default function Upload() {
           </div>
           <div className="flex-1">
             <Tips />
-            <ImageInput setImage={setPreview} />
+            <ImageInput setFile={setSelectedFile} />
           </div>
         </div>
         <button className="btn btn-primary btn-block" onClick={handleDiffusion}>
@@ -36,28 +62,14 @@ export default function Upload() {
   );
 }
 
-const ImageInput = ({ setImage }: { setImage: (preview?: string) => void }) => {
-  const [selectedFile, setSelectedFile] = useState<Blob | MediaSource>();
-
+const ImageInput = ({ setFile }: { setFile: any }) => {
   const onSelectFile = (e: any) => {
     if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFile(undefined);
+      setFile(undefined);
       return;
     }
-    setSelectedFile(e.target.files[0]);
+    setFile(e.target.files[0]);
   };
-
-  useEffect(() => {
-    if (!selectedFile) {
-      setImage(undefined);
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(selectedFile);
-    setImage(objectUrl);
-
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedFile]);
 
   return (
     <input

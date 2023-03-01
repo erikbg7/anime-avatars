@@ -6,6 +6,7 @@ import { trpc } from '../utils/trpc';
 import { getStripe } from '@/utils/stripe';
 import localFont from '@next/font/local';
 import Demo from '@/components/Demo';
+import Logo from '@/components/Logo';
 
 const shibuya = localFont({ src: '../fonts/go3.ttf' });
 
@@ -27,12 +28,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className="fixed top-4 left-4 flex items-center glow-pulse">
-          <div className="relative w-8 h-8">
-            <Image src="/logo2.svg" alt="logo" fill />
-          </div>
-          <span className={`${shibuya.className} text-2xl text-white mx-3`}>ANIME AI</span>
-        </div>
+        <Logo />
         <div className="hero min-h-screen" style={{ backgroundImage: `url("/night-bg.gif")` }}>
           <div className="hero-overlay bg-black bg-opacity-60"></div>
           {/* <img src="/japan.png" className="max-w-sm"></img> */}

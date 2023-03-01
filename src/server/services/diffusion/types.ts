@@ -24,9 +24,17 @@ const diffusionResultSchema = z.object({
   output: z.array(diffusionResultImageSchema),
 });
 
+const createCustomerSchema = z.object({ id: z.string(), email: z.string() });
+
+const isCustomerSchema = z.object({ session_id: z.string() });
+
 export {
+  createCustomerSchema,
   promptInputSchema,
   diffusionResultSchema,
   diffusionResultImageSchema,
   diffusionStatusSchema,
+  isCustomerSchema,
 };
+
+export type { PromptInput, DiffusionResult, DiffusionResultImage, DiffusionStatus };
