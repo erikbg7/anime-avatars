@@ -2,14 +2,16 @@ import { useEffect, useState } from 'react';
 import Layout from '@/components/layout';
 import { trpc } from '@/utils/trpc';
 import { createClient } from '@supabase/supabase-js';
+import { DiffusionParams } from '@/pages/payment/[sessionId]';
 
-type Props = { session_id: string; setBaseImageUrl: (url: string) => void };
+type Props = { session_id: string; setDiffusionParams: (params: DiffusionParams) => void };
 
-export default function Upload({ session_id, setBaseImageUrl }: Props) {
+export default function Upload({ session_id, setDiffusionParams }: Props) {
+  const [genre, setGenre] = useState<string>('woman');
   const [preview, setPreview] = useState<string>();
   const [selectedFile, setSelectedFile] = useState<File>();
 
-  const getToken = trpc.diffusion.getUploadToken.useMutation();
+  const getToken = trpc.storage.getUploadToken.useMutation();
 
   useEffect(() => {
     if (!selectedFile) {
@@ -35,10 +37,10 @@ export default function Upload({ session_id, setBaseImageUrl }: Props) {
     await supabase.storage.from('images').upload(session_id + '/' + selectedFile.name, blob);
     const { data, error } = await supabase.storage
       .from('images')
-      .createSignedUrl(selectedFile.name, 3600);
+      .createSignedUrl(session_id + '/' + selectedFile.name, 3600);
 
     if (!error) {
-      setBaseImageUrl(data.signedUrl);
+      setDiffusionParams({ url: data.signedUrl, genre });
     }
   };
 
@@ -52,6 +54,33 @@ export default function Upload({ session_id, setBaseImageUrl }: Props) {
           <div className="flex-1">
             <Tips />
             <ImageInput setFile={setSelectedFile} />
+            <div className="max-w-sm mx-auto py-6">
+              <h2>You want the image to reasemble a:</h2>
+              <div className="form-control">
+                <label className="label cursor-pointer">
+                  <span className="label-text">Man</span>
+                  <input
+                    type="radio"
+                    name="radio-10"
+                    className="radio checked:bg-violet-500"
+                    onChange={() => setGenre('man')}
+                    checked={genre === 'man'}
+                  />
+                </label>
+              </div>
+              <div className="form-control">
+                <label className="label cursor-pointer">
+                  <span className="label-text">Woman</span>
+                  <input
+                    type="radio"
+                    name="radio-10"
+                    className="radio checked:bg-violet-500"
+                    onChange={() => setGenre('woman')}
+                    checked={genre === 'woman'}
+                  />
+                </label>
+              </div>
+            </div>
           </div>
         </div>
         <button className="btn btn-primary btn-block" onClick={handleDiffusion}>

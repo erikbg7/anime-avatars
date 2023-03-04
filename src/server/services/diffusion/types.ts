@@ -1,40 +1,52 @@
 import z from 'zod';
 
-type PromptInput = z.infer<typeof promptInputSchema>;
-const promptInputSchema = z.object({
-  prompt: z.string(),
-  prompt_strength: z.number().min(0).max(1).optional(),
-  guidance_scale: z.number().min(1).max(20).optional(),
-  init_image: z.string().url().optional(),
-});
-
 type DiffusionStatus = z.infer<typeof diffusionStatusSchema>;
 const diffusionStatusSchema = z.enum(['COMPLETED', 'IN_QUEUE', 'IN_PROGRESS', 'FAILED']);
 
 type DiffusionResultImage = z.infer<typeof diffusionResultImageSchema>;
 const diffusionResultImageSchema = z.object({ image: z.string().url(), seed: z.number() });
 
-type DiffusionResult = z.infer<typeof diffusionResultSchema>;
-const diffusionResultSchema = z.object({
-  id: z.string(),
-  delayTime: z.number(),
-  executionTime: z.number(),
-  status: diffusionStatusSchema,
-  input: promptInputSchema,
-  output: z.array(diffusionResultImageSchema),
+type DiffusionRunInput = z.infer<typeof runDiffusionInputSchema>;
+const runDiffusionInputSchema = z.object({
+  prompt: z.string(),
+  negative_prompt: z.string().optional(),
+  prompt_strength: z.number().min(0).max(1).optional(),
+  guidance_scale: z.number().min(1).max(20).optional(),
+  init_image: z.string().url().optional(),
+  scheduler: z.string().optional(),
+  num_inference_steps: z.number().min(0).max(500).optional(),
 });
 
-const createCustomerSchema = z.object({ id: z.string(), email: z.string() });
+type DiffusionRunOutput = z.infer<typeof runDiffusionOutputSchema>;
+const runDiffusionOutputSchema = z.object({ id: z.string(), status: diffusionStatusSchema });
 
-const isCustomerSchema = z.object({ session_id: z.string() });
+type DiffusionStatusInput = z.infer<typeof statusDiffusionInputSchema>;
+const statusDiffusionInputSchema = z.object({ jobId: z.string() });
+
+type DiffusionStatusOutput = z.infer<typeof statusDiffusionOutputSchema>;
+const statusDiffusionOutputSchema = z.object({
+  id: z.string().optional(),
+  delayTime: z.number().optional(),
+  executionTime: z.number().optional(),
+  status: diffusionStatusSchema,
+  input: runDiffusionInputSchema,
+  output: z.array(diffusionResultImageSchema).optional(),
+});
 
 export {
-  createCustomerSchema,
-  promptInputSchema,
-  diffusionResultSchema,
-  diffusionResultImageSchema,
   diffusionStatusSchema,
-  isCustomerSchema,
+  diffusionResultImageSchema,
+  runDiffusionInputSchema,
+  runDiffusionOutputSchema,
+  statusDiffusionInputSchema,
+  statusDiffusionOutputSchema,
 };
 
-export type { PromptInput, DiffusionResult, DiffusionResultImage, DiffusionStatus };
+export type {
+  DiffusionResultImage,
+  DiffusionRunInput,
+  DiffusionRunOutput,
+  DiffusionStatus,
+  DiffusionStatusInput,
+  DiffusionStatusOutput,
+};
