@@ -5,10 +5,11 @@ import { DiffusionRunInput } from '@/server/services/diffusion/types';
 type Props = {
   url: string;
   genre: string;
+  description: string;
   prompt: DiffusionRunInput;
 };
 
-export default function DiffussionImage({ url, genre, prompt }: Props) {
+export default function DiffussionImage({ url, genre, prompt, description }: Props) {
   const effectCalled = useRef(false);
   const [finished, setFinished] = useState(false);
   const [resultImage, setResultImage] = useState<string>();
@@ -43,11 +44,13 @@ export default function DiffussionImage({ url, genre, prompt }: Props) {
     if (!finished && !effectCalled.current) {
       const { prompt: rawPrompt, ...config } = prompt;
       effectCalled.current = true;
-      diffusion.mutate({
-        init_image: url,
-        prompt: rawPrompt.replace('{genre}', genre),
-        ...config,
-      });
+      setTimeout(() => {
+        diffusion.mutate({
+          init_image: url,
+          prompt: rawPrompt.replace('{genre}', genre).concat(', ').concat(description),
+          ...config,
+        });
+      }, Math.random() * 1000);
     }
   }, [url, finished]);
 

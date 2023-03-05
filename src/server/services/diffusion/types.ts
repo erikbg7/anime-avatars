@@ -1,5 +1,8 @@
 import z from 'zod';
 
+const interrogateInputSchema = z.object({ base64Image: z.string(), quality: z.string() });
+const interrogateOutputSchema = z.object({ description: z.string() });
+
 type DiffusionStatus = z.infer<typeof diffusionStatusSchema>;
 const diffusionStatusSchema = z.enum(['COMPLETED', 'IN_QUEUE', 'IN_PROGRESS', 'FAILED']);
 
@@ -15,6 +18,7 @@ const runDiffusionInputSchema = z.object({
   init_image: z.string().url().optional(),
   scheduler: z.string().optional(),
   num_inference_steps: z.number().min(0).max(500).optional(),
+  seed: z.number().optional(),
 });
 
 type DiffusionRunOutput = z.infer<typeof runDiffusionOutputSchema>;
@@ -34,6 +38,8 @@ const statusDiffusionOutputSchema = z.object({
 });
 
 export {
+  interrogateInputSchema,
+  interrogateOutputSchema,
   diffusionStatusSchema,
   diffusionResultImageSchema,
   runDiffusionInputSchema,

@@ -29,10 +29,11 @@ const REALISTIC_PROMPTS: DiffusionRunInput[] = [
 const PROMPTS: DiffusionRunInput[] = [
   {
     prompt:
-      'portrait of an adult {genre} with scratch on face, (skin color), lightnings on background, shonen anime style, masterpiece, best quality',
+      'portrait of an adult {genre} with (scratch on face), ((scar on eye)), ((lightnings on background)), shonen anime style, masterpiece, best quality',
     prompt_strength: 0.8,
     num_inference_steps: 70,
     guidance_scale: 12,
+    seed: 60144,
     negative_prompt:
       '((((nude)))), (naked), ((((ugly)))), (((duplicate))), ((morbid)), ((mutilated)), [out of frame], extra fingers, mutated hands, ((poorly drawn hands)), ((poorly drawn face)), (((mutation))), (((deformed))), ((ugly)), blurry, ((bad anatomy)), (((bad proportions))), ((extra limbs)), cloned face, (((disfigured))). out of frame, ugly, extra limbs, (bad anatomy), gross proportions, (malformed limbs), ((missing arms)), ((missing legs)), (((extra arms))), (((extra legs))), mutated hands, (fused fingers), (too many fingers), (((long neck)))',
     // scheduler: 'DDIM',
@@ -59,17 +60,22 @@ const PROMPTS: DiffusionRunInput[] = [
   // },
   {
     prompt:
-      'portrait of an adult {genre} with cat ears, (skin color), cute, cherry blossom leaves on background, masterpiece, best quality',
+      'portrait of an adult {genre} with (cat ears), cute, (cherry blossom leaves on background), masterpiece, best quality',
     prompt_strength: 0.8,
     num_inference_steps: 70,
     guidance_scale: 12,
+    seed: 60144,
     negative_prompt:
       '((((nude)))), (naked), ((((ugly)))), (((duplicate))), ((morbid)), ((mutilated)), [out of frame], extra fingers, mutated hands, ((poorly drawn hands)), ((poorly drawn face)), (((mutation))), (((deformed))), ((ugly)), blurry, ((bad anatomy)), (((bad proportions))), ((extra limbs)), cloned face, (((disfigured))). out of frame, ugly, extra limbs, (bad anatomy), gross proportions, (malformed limbs), ((missing arms)), ((missing legs)), (((extra arms))), (((extra legs))), mutated hands, (fused fingers), (too many fingers), (((long neck)))',
   },
 ];
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
-export type DiffusionParams = { url: string; genre: string };
+export type DiffusionParams = {
+  url: string;
+  genre: string;
+  description: string;
+};
 
 export default function PaymentPage(props: Props) {
   const [diffusionParams, setDiffusionParams] = useState<DiffusionParams>();
@@ -90,6 +96,7 @@ export default function PaymentPage(props: Props) {
             <DiffussionImage
               url={diffusionParams.url}
               genre={diffusionParams.genre}
+              description={diffusionParams.description}
               prompt={prompt}
             />
           ))}

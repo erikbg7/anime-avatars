@@ -3,15 +3,35 @@ import Layout from '@/components/layout';
 import { trpc } from '@/utils/trpc';
 import { createClient } from '@supabase/supabase-js';
 import { DiffusionParams } from '@/pages/payment/[sessionId]';
+import { config } from '@/server/services/diffusion/config';
 
 type Props = { session_id: string; setDiffusionParams: (params: DiffusionParams) => void };
 
+async function interrogateImage(base64: string, q: string) {
+  try {
+    const res = await fetch(config.INTERROGATE.ENDPOINT, {
+      body: JSON.stringify({
+        data: [base64, q],
+      }),
+      ...config.INTERROGATE.CONFIG,
+    });
+
+    const data = await res.json();
+    console.log({ data });
+    return data?.data?.[0] || '';
+  } catch (e) {
+    console.log({ e });
+  }
+}
+
 export default function Upload({ session_id, setDiffusionParams }: Props) {
   const [genre, setGenre] = useState<string>('woman');
+  const [loading, setLoading] = useState<boolean>(false);
   const [preview, setPreview] = useState<string>();
   const [selectedFile, setSelectedFile] = useState<File>();
 
   const getToken = trpc.storage.getUploadToken.useMutation();
+  const interrogate = trpc.diffusion.interrogate.useMutation();
 
   useEffect(() => {
     if (!selectedFile) {
@@ -34,14 +54,34 @@ export default function Upload({ session_id, setDiffusionParams }: Props) {
     const arrayBuffer = await selectedFile.arrayBuffer();
     const blob = new Blob([arrayBuffer], { type: selectedFile.type });
 
-    await supabase.storage.from('images').upload(session_id + '/' + selectedFile.name, blob);
-    const { data, error } = await supabase.storage
-      .from('images')
-      .createSignedUrl(session_id + '/' + selectedFile.name, 3600);
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      console.log({ r: reader.result });
+      setLoading(true);
 
-    if (!error) {
-      setDiffusionParams({ url: data.signedUrl, genre });
-    }
+      if (reader.result) {
+        try {
+          const description = await interrogateImage(reader.result as string, 'fast');
+          // const description = '';
+          await supabase.storage.from('images').upload(session_id + '/' + selectedFile.name, blob);
+          const { data, error } = await supabase.storage
+            .from('images')
+            .createSignedUrl(session_id + '/' + selectedFile.name, 3600);
+
+          if (!error) {
+            setDiffusionParams({ url: data.signedUrl, genre, description });
+          }
+
+          setLoading(false);
+        } catch (e) {
+          setLoading(false);
+        }
+      }
+
+      // Logs data:<type>;base64,wL2dvYWwgbW9yZ...
+      // interrogate.mutate({ base64Image: reader.result as string, quality: 'best' });
+    };
+    reader.readAsDataURL(blob);
   };
 
   return (
@@ -83,8 +123,8 @@ export default function Upload({ session_id, setDiffusionParams }: Props) {
             </div>
           </div>
         </div>
-        <button className="btn btn-primary btn-block" onClick={handleDiffusion}>
-          Post
+        <button disabled={loading} className="btn btn-primary btn-block" onClick={handleDiffusion}>
+          {loading ? 'Loading' : 'Post'}
         </button>
       </div>
     </Layout>
@@ -137,3 +177,5 @@ const PreviewImage = ({ preview }: { preview?: string }) => {
     </div>
   );
 };
+
+// SEE RESULTS button, will open a model where the images are shown bigger with better quality
