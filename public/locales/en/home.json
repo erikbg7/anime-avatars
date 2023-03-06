@@ -1,0 +1,21 @@
+{
+  "back-to-home": "Back to home",
+  "error-with-status": "A {{statusCode}} error occurred on server",
+  "error-without-status": "An error occurred on the server",
+  "h1": "A simple example",
+  "title2": "Home | next-i18next",
+  "to-second-page": "To second page",
+  "seen-on": "as seen on",
+  "cta-start": "Get started",
+  "features": {
+    "payment": "Secure Payment",
+    "quality": "Highest possible quality",
+    "amount": "Get 5 different anime styles",
+    "description": "Profile pictures for your socials"
+  },
+  "title": {
+    "line-1": "Create your",
+    "line-2": "ANIME STYLE",
+    "line-3": "Profile Pictures"
+  }
+}

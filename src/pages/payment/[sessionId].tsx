@@ -2,73 +2,10 @@ import DiffussionImage from '@/components/DiffusionImage';
 import Logo from '@/components/Logo';
 import Upload from '@/components/Upload';
 import { DiffusionRunInput } from '@/server/services/diffusion/types';
+import { KAWAII_PROMPTS, NARUTO_PROMPTS, SHONEN_PROMPTS } from '@/utils/prompts';
 import { trpc } from '@/utils/trpc';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useState } from 'react';
-
-const REALISTIC_PROMPTS: DiffusionRunInput[] = [
-  {
-    prompt:
-      'portrait of an adult {genre} with scratch on face, lightnings on background, shonen anime style, masterpiece, best quality',
-    prompt_strength: 0.61,
-    num_inference_steps: 70,
-    guidance_scale: 12,
-  },
-  {
-    prompt:
-      'portrait of an adult {genre} with cat ears, cute, cherry blossom leaves on background, kawaii anime style, masterpiece, best quality',
-    prompt_strength: 0.7,
-    num_inference_steps: 70,
-    guidance_scale: 6,
-    negative_prompt:
-      '((((nude)))), (naked), ((((ugly)))), (((duplicate))), ((morbid)), ((mutilated)), [out of frame], extra fingers, mutated hands, ((poorly drawn hands)), ((poorly drawn face)), (((mutation))), (((deformed))), ((ugly)), blurry, ((bad anatomy)), (((bad proportions))), ((extra limbs)), cloned face, (((disfigured))). out of frame, ugly, extra limbs, (bad anatomy), gross proportions, (malformed limbs), ((missing arms)), ((missing legs)), (((extra arms))), (((extra legs))), mutated hands, (fused fingers), (too many fingers), (((long neck)))',
-    // scheduler: 'DDIM',
-  },
-];
-
-const PROMPTS: DiffusionRunInput[] = [
-  {
-    prompt:
-      'portrait of an adult {genre} with (scratch on face), ((scar on eye)), ((lightnings on background)), shonen anime style, masterpiece, best quality',
-    prompt_strength: 0.8,
-    num_inference_steps: 70,
-    guidance_scale: 12,
-    seed: 60144,
-    negative_prompt:
-      '((((nude)))), (naked), ((((ugly)))), (((duplicate))), ((morbid)), ((mutilated)), [out of frame], extra fingers, mutated hands, ((poorly drawn hands)), ((poorly drawn face)), (((mutation))), (((deformed))), ((ugly)), blurry, ((bad anatomy)), (((bad proportions))), ((extra limbs)), cloned face, (((disfigured))). out of frame, ugly, extra limbs, (bad anatomy), gross proportions, (malformed limbs), ((missing arms)), ((missing legs)), (((extra arms))), (((extra legs))), mutated hands, (fused fingers), (too many fingers), (((long neck)))',
-    // scheduler: 'DDIM',
-  },
-
-  // More fantasy kawaii
-  // {
-  //   prompt:
-  //     'portrait of an adult {genre} animal ears, (skin color), animal_ears, cat_ears, pointy_ears, kawaii anime style, masterpiece, best quality',
-  //   prompt_strength: 0.9,
-  //   num_inference_steps: 70,
-  //   guidance_scale: 10,
-  //   negative_prompt:
-  //     'hands, hand, ((((nude)))), (naked), ((((ugly)))), (((duplicate))), ((morbid)), ((mutilated)), [out of frame], extra fingers, mutated hands, ((poorly drawn hands)), ((poorly drawn face)), (((mutation))), (((deformed))), ((ugly)), blurry, ((bad anatomy)), (((bad proportions))), ((extra limbs)), cloned face, (((disfigured))). out of frame, ugly, extra limbs, (bad anatomy), gross proportions, (malformed limbs), ((missing arms)), ((missing legs)), (((extra arms))), (((extra legs))), mutated hands, (fused fingers), (too many fingers), (((long neck)))',
-  //   // scheduler: 'DDIM',
-  // },
-  // {
-  //   prompt:
-  //     'portrait of an adult {genre} with cat ears, (skin color), cute, cherry blossom leaves on background, masterpiece, best quality',
-  //   prompt_strength: 0.95,
-  //   num_inference_steps: 50,
-  //   guidance_scale: 10,
-  //   scheduler: 'DDIM',
-  // },
-  {
-    prompt:
-      'portrait of an adult {genre} with (cat ears), cute, (cherry blossom leaves on background), masterpiece, best quality',
-    prompt_strength: 0.8,
-    num_inference_steps: 70,
-    guidance_scale: 12,
-    seed: 60144,
-    negative_prompt:
-      '((((nude)))), (naked), ((((ugly)))), (((duplicate))), ((morbid)), ((mutilated)), [out of frame], extra fingers, mutated hands, ((poorly drawn hands)), ((poorly drawn face)), (((mutation))), (((deformed))), ((ugly)), blurry, ((bad anatomy)), (((bad proportions))), ((extra limbs)), cloned face, (((disfigured))). out of frame, ugly, extra limbs, (bad anatomy), gross proportions, (malformed limbs), ((missing arms)), ((missing legs)), (((extra arms))), (((extra legs))), mutated hands, (fused fingers), (too many fingers), (((long neck)))',
-  },
-];
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 export type DiffusionParams = {
@@ -91,16 +28,23 @@ export default function PaymentPage(props: Props) {
       <Upload session_id={props.sessionId} setDiffusionParams={setDiffusionParams} />
 
       {!!diffusionParams && (
-        <div className="flex justify-center">
-          {PROMPTS.map((prompt) => (
-            <DiffussionImage
-              url={diffusionParams.url}
-              genre={diffusionParams.genre}
-              description={diffusionParams.description}
-              prompt={prompt}
-            />
-          ))}
-        </div>
+        <>
+          <DiffusionStyleSection
+            title="Kawaii Style"
+            diffusionParams={diffusionParams}
+            prompts={KAWAII_PROMPTS}
+          />
+          <DiffusionStyleSection
+            title="Shonen Style"
+            diffusionParams={diffusionParams}
+            prompts={SHONEN_PROMPTS}
+          />
+          <DiffusionStyleSection
+            title="Naruto Style"
+            diffusionParams={diffusionParams}
+            prompts={NARUTO_PROMPTS}
+          />
+        </>
       )}
     </main>
   );
@@ -114,4 +58,30 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       sessionId,
     },
   };
+};
+
+const DiffusionStyleSection = ({
+  prompts,
+  title,
+  diffusionParams,
+}: {
+  prompts: DiffusionRunInput[];
+  diffusionParams: DiffusionParams;
+  title: string;
+}) => {
+  return (
+    <section className="prose max-w-[70%] mx-auto">
+      <h2>{title}</h2>
+      <div className="flex justify-center">
+        {prompts.map((prompt) => (
+          <DiffussionImage
+            url={diffusionParams.url}
+            genre={diffusionParams.genre}
+            description={diffusionParams.description}
+            prompt={prompt}
+          />
+        ))}
+      </div>
+    </section>
+  );
 };

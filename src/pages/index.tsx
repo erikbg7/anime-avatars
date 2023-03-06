@@ -1,5 +1,7 @@
 import Head from 'next/head';
 import Image from 'next/image';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 import styles from '@/styles/Home.module.css';
 import { trpc } from '../utils/trpc';
@@ -7,10 +9,17 @@ import { getStripe } from '@/utils/stripe';
 import localFont from '@next/font/local';
 import Demo from '@/components/Demo';
 import Logo from '@/components/Logo';
+import { useRouter } from 'next/router';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
 const shibuya = localFont({ src: '../fonts/go3.ttf' });
 
-export default function Home() {
+type Props = InferGetStaticPropsType<typeof getStaticProps>;
+
+export default function Home(_props: Props) {
+  const { t } = useTranslation('home');
+  const { locale, locales } = useRouter();
+  console.log({ locale, locales });
   const purchase = trpc.payments.purchase.useMutation();
 
   const handlePurchase = async () => {
@@ -35,23 +44,23 @@ export default function Home() {
           <div className="hero-content text-center text-white flex flex-col">
             <div className="max-w-lg">
               <h1 className={`flex flex-col mb-6 text-6xl font-semibold ${shibuya.className}`}>
-                <span>Create your</span>
+                <span>{t('title.line-1')}</span>
                 <span
                   className={`${shibuya.className} tracking-wider text-7xl text-transparent bg-clip-text bg-gradient-to-b from-purple-400 to-pink-600 mt-4`}
                 >
-                  ANIME STYLE
+                  {t('title.line-2')}
                 </span>
-                <span>Profile Pictures</span>
+                <span>{t('title.line-3')}</span>
               </h1>
               <div className="my-5">
-                <p className="text-lg my-2">🔒 Secure Payment</p>
-                <p className="text-lg my-2">✨ Highest possible quality</p>
-                <p className="text-lg my-2">🌀 Get 5 different anime styles</p>
-                <p className="text-lg my-2">🎆 Profile pictures for your socials</p>
+                <p className="text-lg my-2">🔒 {t('features.payment')}</p>
+                <p className="text-lg my-2">✨ {t('features.quality')}</p>
+                <p className="text-lg my-2">🌀 {t('features.amount')}</p>
+                <p className="text-lg my-2">🎆 {t('features.description')}</p>
               </div>
             </div>
             <div className="flex items-center mt-24">
-              <p className="text-xs opacity-50 mr-6">as seen on</p>
+              <p className="text-xs opacity-50 mr-6">{t('seen-on')}</p>
               <img
                 loading="lazy"
                 className="h-6 mr-6 filter-to-white"
@@ -81,7 +90,7 @@ export default function Home() {
           </div>
           <div className="fixed bottom-0 w-full text-center bg-brand border-t border-slate-500 p-6 z-50">
             <button onClick={handlePurchase} className="cta btn btn-primary glow w-80">
-              Get Started - 9.99€
+              {t('cta-start')} - 9.99€
             </button>
           </div>
         </div>
@@ -145,3 +154,11 @@ export default function Home() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = async ({ locale = 'en' }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['home'])),
+    },
+  };
+};

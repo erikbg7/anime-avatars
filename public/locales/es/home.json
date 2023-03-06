@@ -1,0 +1,21 @@
+{
+  "back-to-home": "Back to home",
+  "error-with-status": "A {{statusCode}} error occurred on server",
+  "error-without-status": "An error occurred on the server",
+  "h1": "A simple example",
+  "title2": "Home | next-i18next",
+  "to-second-page": "To second page",
+  "seen-on": "visto en",
+  "cta-start": "Empezar",
+  "features": {
+    "payment": "Pago seguro",
+    "quality": "Maxima calidad asegurada",
+    "amount": "Consigue 5 estilos de anime diferentes",
+    "description": "Imagenes de perfil para tus redes sociales"
+  },
+  "title": {
+    "line-1": "Convierte a",
+    "line-2": "ESTILO ANIME",
+    "line-3": "tu Foto de Perfil"
+  }
+}

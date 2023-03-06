@@ -4,6 +4,7 @@ import { trpc } from '@/utils/trpc';
 import { createClient } from '@supabase/supabase-js';
 import { DiffusionParams } from '@/pages/payment/[sessionId]';
 import { config } from '@/server/services/diffusion/config';
+import { convertToBase64 } from '@/utils/upload';
 
 type Props = { session_id: string; setDiffusionParams: (params: DiffusionParams) => void };
 
@@ -47,6 +48,9 @@ export default function Upload({ session_id, setDiffusionParams }: Props) {
 
   const handleDiffusion = async () => {
     if (!selectedFile) return;
+
+    setLoading(true);
+
     const token = await getToken.mutateAsync({ id: session_id });
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
     const supabase = createClient(supabaseUrl, token);
@@ -54,34 +58,18 @@ export default function Upload({ session_id, setDiffusionParams }: Props) {
     const arrayBuffer = await selectedFile.arrayBuffer();
     const blob = new Blob([arrayBuffer], { type: selectedFile.type });
 
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      console.log({ r: reader.result });
-      setLoading(true);
+    const base64Image = await convertToBase64(blob);
+    const path = session_id + '/' + selectedFile.name;
 
-      if (reader.result) {
-        try {
-          const description = await interrogateImage(reader.result as string, 'fast');
-          // const description = '';
-          await supabase.storage.from('images').upload(session_id + '/' + selectedFile.name, blob);
-          const { data, error } = await supabase.storage
-            .from('images')
-            .createSignedUrl(session_id + '/' + selectedFile.name, 3600);
+    const description = await interrogateImage(base64Image, 'fast');
+    await supabase.storage.from('images').upload(path, blob);
+    const { data, error } = await supabase.storage.from('images').createSignedUrl(path, 3600);
 
-          if (!error) {
-            setDiffusionParams({ url: data.signedUrl, genre, description });
-          }
+    if (!error) {
+      setDiffusionParams({ url: data.signedUrl, genre, description });
+    }
 
-          setLoading(false);
-        } catch (e) {
-          setLoading(false);
-        }
-      }
-
-      // Logs data:<type>;base64,wL2dvYWwgbW9yZ...
-      // interrogate.mutate({ base64Image: reader.result as string, quality: 'best' });
-    };
-    reader.readAsDataURL(blob);
+    setLoading(false);
   };
 
   return (
@@ -133,11 +121,9 @@ export default function Upload({ session_id, setDiffusionParams }: Props) {
 
 const ImageInput = ({ setFile }: { setFile: any }) => {
   const onSelectFile = (e: any) => {
-    if (!e.target.files || e.target.files.length === 0) {
-      setFile(undefined);
-      return;
+    if (!!e.target.files && e.target.files.length > 0) {
+      setFile(e.target.files[0]);
     }
-    setFile(e.target.files[0]);
   };
 
   return (
@@ -165,7 +151,7 @@ const PreviewImage = ({ preview }: { preview?: string }) => {
   return (
     <div className="max-w-lg mx-auto rounded-md overflow-hidden aspect-square">
       {preview ? (
-        <img src={preview} />
+        <img className="w-full h-full object-cover" src={preview} />
       ) : (
         <img
           className="w-full h-full object-cover"
