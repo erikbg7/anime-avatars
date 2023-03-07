@@ -1,4 +1,6 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Image from 'next/image';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
@@ -7,10 +9,9 @@ import styles from '@/styles/Home.module.css';
 import { trpc } from '../utils/trpc';
 import { getStripe } from '@/utils/stripe';
 import localFont from '@next/font/local';
-import Demo from '@/components/Demo';
 import Logo from '@/components/Logo';
-import { useRouter } from 'next/router';
-import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import Demo from '@/components/Demo';
+import Steps from '@/components/Steps';
 
 const shibuya = localFont({ src: '../fonts/go3.ttf' });
 
@@ -109,6 +110,10 @@ export default function Home(_props: Props) {
             <Demo />
           </div>
         </section>
+        <hr className="w-full border-slate-500" />
+
+        <Steps />
+
         <hr className="w-full border-slate-500" />
         <section className="w-[60%] mx-auto text-center p-12">
           <h2 className="text-3xl font-bold mb-6">❓ Frequently Asked Questions</h2>

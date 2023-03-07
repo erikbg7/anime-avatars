@@ -4,7 +4,14 @@ module.exports = {
   plugins: [require('daisyui'), require('@tailwindcss/typography')],
   theme: {
     extend: {
+      gradientColorStops: {
+        brand: '#111',
+      },
+
       backgroundColor: {
+        brand: '#111',
+      },
+      colors: {
         brand: '#111',
       },
       fontFamily: {
