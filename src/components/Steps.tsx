@@ -1,4 +1,9 @@
 import clsx from 'clsx';
+import Image from 'next/image';
+import VisaLogo from './VisaLogo';
+import lockImage from '@/public/logos/lock.png';
+import MasterCardLogo from './MasterCardLogo';
+import StripeLogo from './StripeLogo';
 
 export default function Steps() {
   return (
@@ -11,9 +16,11 @@ export default function Steps() {
           subtitle="Wake up the Artificial Intelligence"
           description="Pay securely to start the process, we use Stripe to achive the maximum security and
             liability in your payments."
-        />
+        >
+          <CreditCard />
+        </StepSection>
         <StepSection
-          id={1}
+          id={2}
           schema="pink"
           title="Upload"
           subtitle="Feed the machine model"
@@ -21,7 +28,7 @@ export default function Steps() {
 					receive the results."
         />
         <StepSection
-          id={1}
+          id={3}
           schema="yellow"
           title="Receive"
           subtitle="Download the amazing results"
@@ -77,9 +84,54 @@ function StepSection(props: StepSectionProps) {
         {props.title}
       </h3>
       <h4 className="text-white text-6xl font-bold my-10 opacity-90">{props.subtitle}</h4>
-      <p className="text-2xl max-w-4xl px-32 text-neutral-500 font-light text-center">
+      <p className="text-2xl max-w-4xl px-32 mb-12 text-neutral-500 font-light text-center">
         {props.description}
       </p>
+      {props.children || null}
     </section>
+  );
+}
+
+function CreditCard() {
+  return (
+    <div className="text-white">
+      <div className="flex flex-col relative px-6 py-4 w-72 bg-slate-800 rounded-lg mx-auto">
+        <span className="text-right font-bold mb-2 ">CREDIT CARD</span>
+        <div className="rounded-md grid grid-cols-3 gap-1 overflow-hidden w-16">
+          <div className="grid grid-rows-3 gap-1">
+            <div className="bg-gray-400/30 h-3"></div>
+            <div className="bg-gray-400/30 h-3"></div>
+            <div className="bg-gray-400/30 h-3"></div>
+          </div>
+
+          <div className="bg-gray-400/30"></div>
+
+          <div className="grid grid-rows-3 gap-1">
+            <div className="bg-gray-400/30 h-3"></div>
+            <div className="bg-gray-400/30 h-3"></div>
+            <div className="bg-gray-400/30 h-3"></div>
+          </div>
+        </div>
+        <div className="flex justify-between my-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-300 text-lg font-mono tracking-widest">
+          <span>1234</span>
+          <span>5678</span>
+          <span>****</span>
+          <span>****</span>
+        </div>
+        <div className="flex justify-between items-center my-2">
+          <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-300">
+            John Doe
+          </div>
+          <VisaLogo />
+          {/* <VisaLogo className="absolute bottom-0 right-0" /> */}
+        </div>
+      </div>
+
+      <div className="flex justify-center items-center text-center p-12 space-x-12">
+        <VisaLogo className="filter-to-gray" />
+        <StripeLogo />
+        <MasterCardLogo className="filter-to-gray w-20 h-20 opacity-40" />
+      </div>
+    </div>
   );
 }

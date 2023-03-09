@@ -46,21 +46,57 @@ export default function Demo() {
           className="invert transform -scale-y-100 -rotate-[55deg] mx-auto"
         />
       </div>
-      <div className="flex flex-wrap justify-center">
-        <div className="relative w-64 h-64 m-4 rounded-md overflow-hidden cursor-pointer">
+      <div className="flex flex-wrap justify-center max-w-5xl">
+        <div className="relative w-32 h-32 m-4 rounded-md overflow-hidden cursor-pointer">
           <Image alt="portrait 1" src={demoImage} fill className="object-cover" />
+          <div className="absolute z-30 px-2 bg-black/50 text-white">💕 Kawaii</div>
         </div>
-        <div className="relative w-64 h-64 m-4 rounded-md overflow-hidden cursor-pointer">
+        <div className="relative w-32 h-32 m-4 rounded-md overflow-hidden cursor-pointer">
           <Image alt="portrait 1" src={demoImage} fill className="object-cover" />
+          <div className="absolute z-30 px-2 bg-black/50 text-white">💕 Kawaii</div>
         </div>
-        <div className="relative w-64 h-64 m-4 rounded-md overflow-hidden cursor-pointer">
+        <div className="relative w-32 h-32 m-4 rounded-md overflow-hidden cursor-pointer">
           <Image alt="portrait 1" src={demoImage} fill className="object-cover" />
+          <div className="absolute z-30 px-2 bg-black/50 text-white">💕 Kawaii</div>
         </div>
-        <div className="relative w-64 h-64 m-4 rounded-md overflow-hidden cursor-pointer">
+
+        <div className="relative w-32 h-32 m-4 rounded-md overflow-hidden cursor-pointer">
           <Image alt="portrait 1" src={demoImage} fill className="object-cover" />
+          <div className="absolute z-30 px-2 bg-black/50 text-white">🤖 Mecha</div>
         </div>
-        <div className="relative w-64 h-64 m-4 rounded-md overflow-hidden cursor-pointer">
+        <div className="relative w-32 h-32 m-4 rounded-md overflow-hidden cursor-pointer">
           <Image alt="portrait 1" src={demoImage} fill className="object-cover" />
+          <div className="absolute z-30 px-2 bg-black/50 text-white">🤖 Mecha</div>
+        </div>
+        <div className="relative w-32 h-32 m-4 rounded-md overflow-hidden cursor-pointer">
+          <Image alt="portrait 1" src={demoImage} fill className="object-cover" />
+          <div className="absolute z-30 px-2 bg-black/50 text-white">🤖 Mecha</div>
+        </div>
+
+        <div className="relative w-32 h-32 m-4 rounded-md overflow-hidden cursor-pointer">
+          <Image alt="portrait 1" src={demoImage} fill className="object-cover" />
+          <div className="absolute z-30 px-2 bg-black/50 text-white">🤖 Mecha</div>
+        </div>
+        <div className="relative w-32 h-32 m-4 rounded-md overflow-hidden cursor-pointer">
+          <Image alt="portrait 1" src={demoImage} fill className="object-cover" />
+          <div className="absolute z-30 px-2 bg-black/50 text-white">🤖 Mecha</div>
+        </div>
+        <div className="relative w-32 h-32 m-4 rounded-md overflow-hidden cursor-pointer">
+          <Image alt="portrait 1" src={demoImage} fill className="object-cover" />
+          <div className="absolute z-30 px-2 bg-black/50 text-white">🤖 Mecha</div>
+        </div>
+
+        <div className="relative w-32 h-32 m-4 rounded-md overflow-hidden cursor-pointer">
+          <Image alt="portrait 1" src={demoImage} fill className="object-cover" />
+          <div className="absolute z-30 px-2 bg-black/50 text-white">🤖 Mecha</div>
+        </div>
+        <div className="relative w-32 h-32 m-4 rounded-md overflow-hidden cursor-pointer">
+          <Image alt="portrait 1" src={demoImage} fill className="object-cover" />
+          <div className="absolute z-30 px-2 bg-black/50 text-white">🤖 Mecha</div>
+        </div>
+        <div className="relative w-32 h-32 m-4 rounded-md overflow-hidden cursor-pointer">
+          <Image alt="portrait 1" src={demoImage} fill className="object-cover" />
+          <div className="absolute z-30 px-2 bg-black/50 text-white">🤖 Mecha</div>
         </div>
       </div>
     </>

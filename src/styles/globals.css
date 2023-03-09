@@ -8,6 +8,12 @@
   vertical-align: middle;
 }
 
+.filter-to-gray {
+  filter: invert(72%) sepia(14%) saturate(225%) hue-rotate(179deg) brightness(88%) contrast(90%);
+  mix-blend-mode: lighten;
+  vertical-align: middle;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
