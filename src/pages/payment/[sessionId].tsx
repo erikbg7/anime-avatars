@@ -73,8 +73,9 @@ const DiffusionStyleSection = ({
     <section className="prose max-w-[70%] mx-auto">
       <h2>{title}</h2>
       <div className="flex justify-center">
-        {prompts.map((prompt) => (
+        {prompts.map((prompt, i) => (
           <DiffussionImage
+            key={i}
             url={diffusionParams.url}
             genre={diffusionParams.genre}
             description={diffusionParams.description}

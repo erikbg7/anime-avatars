@@ -28,6 +28,7 @@ export default function Demo() {
       <div className="flex justify-center">
         {PORTRAITS.map((portrait, i) => (
           <div
+            key={i}
             onClick={() => setSelected(i)}
             className={clsx(
               'relative w-32 h-32 m-4 rounded-md overflow-hidden cursor-pointer',

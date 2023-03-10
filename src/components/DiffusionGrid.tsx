@@ -31,8 +31,8 @@ type Props = { url: string; genre: string };
 function DiffusionGrid({ url, genre }: Props) {
   return (
     <div className="grid grid-cols-4">
-      {gridPrompts.map((p) => (
-        <div className="flex flex-col items-center">
+      {gridPrompts.map((p, i) => (
+        <div key={i} className="flex flex-col items-center">
           <DiffussionImage url={url} genre={genre} prompt={p} description={''} />
           <div>
             CFG: {p.guidance_scale} - Strength: {p.prompt_strength}
