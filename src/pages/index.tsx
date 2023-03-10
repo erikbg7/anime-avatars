@@ -127,7 +127,7 @@ export default function Home(_props: Props) {
               vary, so we generate a lot of avatars so you can pick the best ones! Transform
               yourself (or your dog, cat, or you and your bf/gf as a couple) into desert punk
               warriors, a zombie at Halloween, an Instagram model in the jungle, the main character
-              in a video game to a fashion model. It's up to you to decide who you want to become!
+              in a video game to a fashion model. Its up to you to decide who you want to become!
               Your AI avatars will look just like you but in the styles you select.
             </p>
             <div>💕 Kawaii</div>
@@ -147,7 +147,7 @@ export default function Home(_props: Props) {
         </section>
 
         <hr className="w-full border-slate-500" />
-        <section className="w-[60%] mx-auto text-center p-12">
+        {/* <section className="w-[60%] mx-auto text-center p-12">
           <h2 className="text-3xl font-bold mb-6">❓ Frequently Asked Questions</h2>
           <div>
             <h3 className="text-2xl font-semibold mb-4">What type of photos should I upload?</h3>
@@ -186,7 +186,7 @@ export default function Home(_props: Props) {
             generate any image (like deepfakes) with your face in it forever. Some are even
             affiliated with foreign governments with might get your data!
           </p>
-        </section>
+        </section> */}
       </main>
     </>
   );
