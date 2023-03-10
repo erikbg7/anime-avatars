@@ -1,3 +1,4 @@
+import DiffusionGrid from '@/components/DiffusionGrid';
 import DiffussionImage from '@/components/DiffusionImage';
 import Logo from '@/components/Logo';
 import Upload from '@/components/Upload';
@@ -28,23 +29,24 @@ export default function PaymentPage(props: Props) {
       <Upload session_id={props.sessionId} setDiffusionParams={setDiffusionParams} />
 
       {!!diffusionParams && (
-        <>
-          <DiffusionStyleSection
-            title="Kawaii Style"
-            diffusionParams={diffusionParams}
-            prompts={KAWAII_PROMPTS}
-          />
-          <DiffusionStyleSection
-            title="Shonen Style"
-            diffusionParams={diffusionParams}
-            prompts={SHONEN_PROMPTS}
-          />
-          <DiffusionStyleSection
-            title="Naruto Style"
-            diffusionParams={diffusionParams}
-            prompts={NARUTO_PROMPTS}
-          />
-        </>
+        <DiffusionGrid url={diffusionParams.url} genre={diffusionParams.genre} />
+        // <>
+        //   <DiffusionStyleSection
+        //     title="Kawaii Style"
+        //     diffusionParams={diffusionParams}
+        //     prompts={KAWAII_PROMPTS}
+        //   />
+        //   <DiffusionStyleSection
+        //     title="Shonen Style"
+        //     diffusionParams={diffusionParams}
+        //     prompts={SHONEN_PROMPTS}
+        //   />
+        //   <DiffusionStyleSection
+        //     title="Naruto Style"
+        //     diffusionParams={diffusionParams}
+        //     prompts={NARUTO_PROMPTS}
+        //   />
+        // </>
       )}
     </main>
   );
