@@ -51,7 +51,7 @@ type StepSectionProps = {
 
 function StepSection(props: StepSectionProps) {
   return (
-    <section className="flex flex-col w-100% mx-auto items-center py-8">
+    <section className="flex flex-col mx-auto items-center p-8">
       <span
         className={clsx('h-24 w-[1px] bg-gradient-to-b from-brand to-blue-400', {
           'to-blue-400': props.schema === 'blue',
@@ -83,8 +83,10 @@ function StepSection(props: StepSectionProps) {
       >
         {props.title}
       </h3>
-      <h4 className="text-white text-6xl font-bold my-10 opacity-90">{props.subtitle}</h4>
-      <p className="text-2xl max-w-4xl px-32 mb-12 text-neutral-500 font-light text-center">
+      <h4 className="text-white text-center text-4xl sm:text-5xl md:text-6xl font-bold my-10 opacity-90">
+        {props.subtitle}
+      </h4>
+      <p className="text-2xl max-w-4xl md:px-32 mb-12 text-neutral-500 font-light text-center">
         {props.description}
       </p>
       {props.children || null}
@@ -127,10 +129,10 @@ function CreditCard() {
         </div>
       </div>
 
-      <div className="flex justify-center items-center text-center p-12 space-x-12">
-        <VisaLogo className="filter-to-gray" />
+      <div className="flex justify-center items-center text-center py-12 space-x-6">
+        <VisaLogo className="filter-to-gray w-16 h-20" />
         <StripeLogo />
-        <MasterCardLogo className="filter-to-gray w-20 h-20 opacity-40" />
+        <MasterCardLogo className="filter-to-gray w-16 h-16 opacity-40" />
       </div>
     </div>
   );

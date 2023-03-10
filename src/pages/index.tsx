@@ -1,7 +1,6 @@
+import { useRef } from 'react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import Image from 'next/image';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 
@@ -19,8 +18,8 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 export default function Home(_props: Props) {
   const { t } = useTranslation('home');
-  const { locale, locales } = useRouter();
-  console.log({ locale, locales });
+  const demoRef = useRef<HTMLDivElement>(null);
+  const stepsRef = useRef<HTMLDivElement>(null);
   const purchase = trpc.payments.purchase.useMutation();
 
   const handlePurchase = async () => {
@@ -28,6 +27,12 @@ export default function Home(_props: Props) {
     const { id } = await purchase.mutateAsync();
     stripe?.redirectToCheckout({ sessionId: id });
   };
+
+  const scrollToDemo = () =>
+    demoRef.current && demoRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  const scrollToSteps = () =>
+    stepsRef.current && stepsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   return (
     <>
@@ -43,11 +48,11 @@ export default function Home(_props: Props) {
           <div className="hero-overlay bg-black bg-opacity-60"></div>
           {/* <img src="/japan.png" className="max-w-sm"></img> */}
           <div className="hero-content text-center text-white flex flex-col">
-            <div className="max-w-lg">
-              <h1 className={`flex flex-col mb-6 text-6xl font-semibold ${shibuya.className}`}>
+            <div className="max-w-2xl">
+              <h1 className={`flex flex-col mb-6 text-7xl font-semibold ${shibuya.className}`}>
                 <span>{t('title.line-1')}</span>
                 <span
-                  className={`${shibuya.className} tracking-wider text-7xl text-transparent bg-clip-text bg-gradient-to-b from-purple-400 to-pink-600 mt-4`}
+                  className={`${shibuya.className} tracking-wider text-8xl text-transparent bg-clip-text bg-gradient-to-b from-purple-400 to-pink-600 mt-4`}
                 >
                   {t('title.line-2')}
                 </span>
@@ -58,6 +63,14 @@ export default function Home(_props: Props) {
                 <p className="text-lg my-2">✨ {t('features.quality')}</p>
                 <p className="text-lg my-2">🌀 {t('features.amount')}</p>
                 <p className="text-lg my-2">🎆 {t('features.description')}</p>
+              </div>
+              <div className="flex flex-col items-center space-y-2">
+                <a className="link" onClick={scrollToDemo}>
+                  Results
+                </a>
+                <a className="link" onClick={scrollToSteps}>
+                  How It Works
+                </a>
               </div>
             </div>
             <div className="flex items-center mt-24">
@@ -95,9 +108,19 @@ export default function Home(_props: Props) {
             </button>
           </div>
         </div>
-        <section>
-          <div className="w-[60%] mx-auto text-center p-12">
-            <h2 className="text-3xl font-bold mb-6">🌀 Get 5 different anime styles</h2>
+        <section ref={demoRef}>
+          <div className="mx-auto text-center p-12">
+            <h2 className="uppercase tracking-widest p-6">
+              15 unique images in 5 different anime styles
+            </h2>
+            <div className="flex justify-center space-x-6">
+              <div className="text-sm">💕 Kawaii</div>
+              <div className="text-sm">🤖 Mecha</div>
+              <div className="text-sm">💥 Shonen</div>
+              <div className="text-sm">🌀 Naruto</div>
+            </div>
+
+            {/* <h2 className="text-3xl font-bold mb-6">🌀 Get 5 different anime styles</h2>
             <p>
               After payment you can select up to 15 styles you want from the ones below. For each
               style we'll generate 8 avatars, for a total of 120+ avatars. With AI, results can
@@ -107,12 +130,21 @@ export default function Home(_props: Props) {
               in a video game to a fashion model. It's up to you to decide who you want to become!
               Your AI avatars will look just like you but in the styles you select.
             </p>
+            <div>💕 Kawaii</div>
+            <div>🤖 Mecha</div>
+            <div>💥 Shonen</div>
+            <div>🌀 Naruto</div>
+             */}
             <Demo />
           </div>
         </section>
         <hr className="w-full border-slate-500" />
-
-        <Steps />
+        <section ref={stepsRef}>
+          <h2 className="uppercase tracking-widest text-center">
+            Get your images in 3 simple steps
+          </h2>
+          <Steps />
+        </section>
 
         <hr className="w-full border-slate-500" />
         <section className="w-[60%] mx-auto text-center p-12">
