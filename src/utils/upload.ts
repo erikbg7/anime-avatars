@@ -1,5 +1,21 @@
 import JSZip from 'jszip';
 
+const getStorageParams = (sessionId: string, content: File | string) => {
+  if (typeof content === 'string') {
+    const [_, b64] = content!.split(',');
+    return {
+      path: `${sessionId}/${Date.now()}.webp`,
+      file: Buffer.from(b64!, 'base64'),
+      options: { contentType: 'image/webp' },
+    };
+  } else {
+    return {
+      path: `${sessionId}/${content.name}`,
+      file: content,
+    };
+  }
+};
+
 const convertToBase64 = async (blob: Blob): Promise<string> => {
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader();
@@ -47,4 +63,4 @@ const saveAs = (blob: Blob, filename: string) => {
   a.click();
 };
 
-export { convertToBase64, saveZip };
+export { convertToBase64, getStorageParams, saveZip };

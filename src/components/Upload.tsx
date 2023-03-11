@@ -1,40 +1,23 @@
-import { useEffect, useState } from 'react';
-import Layout from '@/components/layout';
+import React from 'react';
 import { trpc } from '@/utils/trpc';
 import { createClient } from '@supabase/supabase-js';
 import { DiffusionParams } from '@/pages/payment/[sessionId]';
-import { config } from '@/server/services/diffusion/config';
-import { convertToBase64 } from '@/utils/upload';
+import Layout from '@/components/Layout';
+import GenreInput from './diffusion/GenreInput';
+import SelfieModal from './diffusion/SelfieModal';
+import { getStorageParams } from '@/utils/upload';
 
 type Props = { session_id: string; setDiffusionParams: (params: DiffusionParams) => void };
 
-async function interrogateImage(base64: string, q: string) {
-  try {
-    const res = await fetch(config.INTERROGATE.ENDPOINT, {
-      body: JSON.stringify({
-        data: [base64, q],
-      }),
-      ...config.INTERROGATE.CONFIG,
-    });
-
-    const data = await res.json();
-    console.log({ data });
-    return data?.data?.[0] || '';
-  } catch (e) {
-    console.log({ e });
-  }
-}
-
 export default function Upload({ session_id, setDiffusionParams }: Props) {
-  const [genre, setGenre] = useState<string>('woman');
-  const [loading, setLoading] = useState<boolean>(false);
-  const [preview, setPreview] = useState<string>();
-  const [selectedFile, setSelectedFile] = useState<File>();
+  const [genre, setGenre] = React.useState<string>('woman');
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [preview, setPreview] = React.useState<string>();
+  const [selectedFile, setSelectedFile] = React.useState<File>();
 
   const getToken = trpc.storage.getUploadToken.useMutation();
-  const interrogate = trpc.diffusion.interrogate.useMutation();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!selectedFile) {
       setPreview(undefined);
       return;
@@ -46,8 +29,14 @@ export default function Upload({ session_id, setDiffusionParams }: Props) {
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
+  const handleTakenSelfie = (image: string) => {
+    setPreview(image);
+    setSelectedFile(undefined);
+  };
+
   const handleDiffusion = async () => {
-    if (!selectedFile) return;
+    const content = selectedFile || preview;
+    if (!content) return;
 
     setLoading(true);
 
@@ -55,19 +44,15 @@ export default function Upload({ session_id, setDiffusionParams }: Props) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
     const supabase = createClient(supabaseUrl, token);
 
-    const arrayBuffer = await selectedFile.arrayBuffer();
-    const blob = new Blob([arrayBuffer], { type: selectedFile.type });
+    const { file, path, options } = getStorageParams(session_id, content);
+    await supabase.storage.from('images').upload(path, file, options);
 
-    const base64Image = await convertToBase64(blob);
-    const path = session_id + '/' + selectedFile.name;
-
-    const description = await interrogateImage(base64Image, 'fast');
-    await supabase.storage.from('images').upload(path, blob);
     const { data, error } = await supabase.storage.from('images').createSignedUrl(path, 3600);
+    console.log({ data });
 
-    if (!error) {
-      setDiffusionParams({ url: data.signedUrl, genre, description });
-    }
+    // if (!error) {
+    //   setDiffusionParams({ url: data.signedUrl, genre, description });
+    // }
 
     setLoading(false);
   };
@@ -75,40 +60,18 @@ export default function Upload({ session_id, setDiffusionParams }: Props) {
   return (
     <Layout>
       <div className="py-24">
-        <div className="flex">
+        <div className="flex flex-col md:flex-row">
           <div className="flex-1">
             <PreviewImage preview={preview} />
           </div>
           <div className="flex-1">
             <Tips />
             <ImageInput setFile={setSelectedFile} />
-            <div className="max-w-sm mx-auto py-6">
-              <h2>You want the image to reasemble a:</h2>
-              <div className="form-control">
-                <label className="label cursor-pointer">
-                  <span className="label-text">Man</span>
-                  <input
-                    type="radio"
-                    name="radio-10"
-                    className="radio checked:bg-violet-500"
-                    onChange={() => setGenre('man')}
-                    checked={genre === 'man'}
-                  />
-                </label>
-              </div>
-              <div className="form-control">
-                <label className="label cursor-pointer">
-                  <span className="label-text">Woman</span>
-                  <input
-                    type="radio"
-                    name="radio-10"
-                    className="radio checked:bg-violet-500"
-                    onChange={() => setGenre('woman')}
-                    checked={genre === 'woman'}
-                  />
-                </label>
-              </div>
-            </div>
+            <label htmlFor="selfie-modal" className="btn btn-primary">
+              Take Selfie
+            </label>
+            <SelfieModal onCapture={handleTakenSelfie} />
+            <GenreInput genre={genre} onGenreChange={setGenre} />
           </div>
         </div>
         <button disabled={loading} className="btn btn-primary btn-block" onClick={handleDiffusion}>
@@ -148,18 +111,12 @@ const Tips = () => {
 };
 
 const PreviewImage = ({ preview }: { preview?: string }) => {
+  const placeholder =
+    'https://st.depositphotos.com/2218212/2938/i/600/depositphotos_29387653-stock-photo-facebook-profile.jpg';
+
   return (
     <div className="max-w-lg mx-auto rounded-md overflow-hidden aspect-square">
-      {preview ? (
-        <img className="w-full h-full object-cover" src={preview} />
-      ) : (
-        <img
-          className="w-full h-full object-cover"
-          src={
-            'https://st.depositphotos.com/2218212/2938/i/600/depositphotos_29387653-stock-photo-facebook-profile.jpg'
-          }
-        />
-      )}
+      <img className="w-full h-full object-cover" src={preview || placeholder} />
     </div>
   );
 };
