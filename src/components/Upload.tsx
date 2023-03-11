@@ -2,7 +2,7 @@ import React from 'react';
 import { trpc } from '@/utils/trpc';
 import { createClient } from '@supabase/supabase-js';
 import { DiffusionParams } from '@/pages/payment/[sessionId]';
-import Layout from '@/components/Layout';
+import Layout from '@/components/PageLayout';
 import GenreInput from './diffusion/GenreInput';
 import SelfieModal from './diffusion/SelfieModal';
 import { getStorageParams } from '@/utils/upload';
