@@ -1,4 +1,5 @@
 import { procedure, router } from '@/server/trpc';
+import { getBaseUrl } from '@/utils/trpc';
 import { z } from 'zod';
 
 export function createPaymentsService() {
@@ -43,8 +44,8 @@ export function createPaymentsService() {
         return { isDiffusionDone };
       }),
     purchase: procedure.mutation(async ({ ctx }) => {
-      console.log('PURCHASE');
       const { stripe } = ctx;
+      const BASE_URL = getBaseUrl();
       const session = await stripe.checkout.sessions.create({
         // customer_creation: 'always',
         payment_method_types: ['card'],
@@ -66,8 +67,8 @@ export function createPaymentsService() {
           },
         ],
         mode: 'payment',
-        success_url: 'http://localhost:3000/payment/{CHECKOUT_SESSION_ID}',
-        cancel_url: 'http://localhost:3000/cancel',
+        success_url: `${BASE_URL}/payment/{CHECKOUT_SESSION_ID}`,
+        cancel_url: `${BASE_URL}/cancel`,
       });
 
       console.log({ session });
