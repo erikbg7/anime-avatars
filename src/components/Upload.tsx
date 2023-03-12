@@ -50,9 +50,9 @@ export default function Upload({ session_id, setDiffusionParams }: Props) {
     const { data, error } = await supabase.storage.from('images').createSignedUrl(path, 3600);
     console.log({ data });
 
-    // if (!error) {
-    //   setDiffusionParams({ url: data.signedUrl, genre, description });
-    // }
+    if (!error) {
+      setDiffusionParams({ url: data.signedUrl, genre, description: '' });
+    }
 
     setLoading(false);
   };
@@ -67,14 +67,14 @@ export default function Upload({ session_id, setDiffusionParams }: Props) {
           <div className="flex-1">
             <Tips />
             <ImageInput setFile={setSelectedFile} />
-            <label htmlFor="selfie-modal" className="btn btn-primary">
+            <label htmlFor="selfie-modal" className="btn-primary btn">
               Take Selfie
             </label>
             <SelfieModal onCapture={handleTakenSelfie} />
             <GenreInput genre={genre} onGenreChange={setGenre} />
           </div>
         </div>
-        <button disabled={loading} className="btn btn-primary btn-block" onClick={handleDiffusion}>
+        <button disabled={loading} className="btn-primary btn-block btn" onClick={handleDiffusion}>
           {loading ? 'Loading' : 'Post'}
         </button>
       </div>
@@ -95,14 +95,14 @@ const ImageInput = ({ setFile }: { setFile: any }) => {
       accept="image/*"
       multiple={false}
       onChange={onSelectFile}
-      className="file-input file-input-bordered file-input-primary w-full max-w-xs"
+      className="file-input-bordered file-input-primary file-input w-full max-w-xs"
     />
   );
 };
 
 const Tips = () => {
   return (
-    <div className="prose text-left px-4">
+    <div className="prose px-4 text-left">
       <h2>Tips</h2>
       <p>✅ Use a portrait image where you can be clearly identified.</p>
       <p>✅ Do not upload multiple people, it is build to handle a single person.</p>
@@ -115,8 +115,8 @@ const PreviewImage = ({ preview }: { preview?: string }) => {
     'https://st.depositphotos.com/2218212/2938/i/600/depositphotos_29387653-stock-photo-facebook-profile.jpg';
 
   return (
-    <div className="max-w-lg mx-auto rounded-md overflow-hidden aspect-square">
-      <img className="w-full h-full object-cover" src={preview || placeholder} />
+    <div className="mx-auto aspect-square max-w-lg overflow-hidden rounded-md">
+      <img className="h-full w-full object-cover" src={preview || placeholder} />
     </div>
   );
 };

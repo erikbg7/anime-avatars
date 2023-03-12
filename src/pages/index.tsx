@@ -7,12 +7,11 @@ import { useTranslation } from 'next-i18next';
 import styles from '@/styles/Home.module.css';
 import { trpc } from '../utils/trpc';
 import { getStripe } from '@/utils/stripe';
-import localFont from '@next/font/local';
 import Logo from '@/components/Logo';
 import Demo from '@/components/Demo';
 import Steps from '@/components/Steps';
-
-const shibuya = localFont({ src: '../fonts/go3.ttf' });
+import Title from '@/components/landing/Title';
+import Socials from '@/components/landing/Socials';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -44,73 +43,34 @@ export default function Home(_props: Props) {
       </Head>
       <main className={styles.main}>
         <Logo />
-        <div className="hero min-h-screen" style={{ backgroundImage: `url("/night-bg.gif")` }}>
+        <div
+          className="hero relative z-50 min-h-screen"
+          style={{ backgroundImage: `url("/night-bg.gif")` }}
+        >
           <div className="hero-overlay bg-black bg-opacity-60"></div>
-          {/* <img src="/japan.png" className="max-w-sm"></img> */}
-          <div className="hero-content text-center text-white flex flex-col">
-            <div className="max-w-2xl">
-              <h1 className={`flex flex-col mb-6 text-7xl font-semibold ${shibuya.className}`}>
-                <span>{t('title.line-1')}</span>
-                <span
-                  className={`${shibuya.className} tracking-wider text-8xl text-transparent bg-clip-text bg-gradient-to-b from-purple-400 to-pink-600 mt-4`}
-                >
-                  {t('title.line-2')}
-                </span>
-                <span>{t('title.line-3')}</span>
-              </h1>
-              <div className="my-5">
-                <p className="text-lg my-2">🔒 {t('features.payment')}</p>
-                <p className="text-lg my-2">✨ {t('features.quality')}</p>
-                <p className="text-lg my-2">🌀 {t('features.amount')}</p>
-                <p className="text-lg my-2">🎆 {t('features.description')}</p>
-              </div>
-              <div className="flex flex-col items-center space-y-2">
-                <a className="link" onClick={scrollToDemo}>
-                  Results
-                </a>
-                <a className="link" onClick={scrollToSteps}>
-                  How It Works
-                </a>
-              </div>
+          <div className="hero-content flex h-full flex-col justify-around pb-32 pt-32 text-center text-white">
+            <Title line1={t('title.line-1')} line2={t('title.line-2')} line3={t('title.line-3')} />
+            <div>
+              <p className="my-2 text-lg">🔒 {t('features.payment')}</p>
+              <p className="my-2 text-lg">✨ {t('features.quality')}</p>
+              <p className="my-2 text-lg">🌀 {t('features.amount')}</p>
+              <p className="my-2 text-lg">🎆 {t('features.description')}</p>
             </div>
-            <div className="flex items-center mt-24">
-              <p className="text-xs opacity-50 mr-6">{t('seen-on')}</p>
-              <img
-                loading="lazy"
-                className="h-6 mr-6 filter-to-white"
-                src="https://avatarai.me/assets/techcrunch.png?1670866305"
-              />
-              <img
-                loading="lazy"
-                className="h-6 mr-6 filter-to-white"
-                src="https://avatarai.me/assets/stability-ai.png?1671498407"
-              />
-              <img
-                loading="lazy"
-                className="h-6 mr-6 filter-to-white"
-                src="https://avatarai.me/assets/fstoppers.png?1670867107"
-              />
-              <img
-                loading="lazy"
-                className="h-6 mr-6 filter-to-white"
-                src="https://avatarai.me/assets/tiktok.png?1670866305"
-              />
-              <img
-                loading="lazy"
-                className="h-6 mr-6 mt-1 filter-to-white"
-                src="https://avatarai.me/assets/instagram.png?1670870083"
-              />
+            <div className="flex flex-col items-center space-y-2">
+              <a className="link" onClick={scrollToDemo}>
+                Results
+              </a>
+              <a className="link" onClick={scrollToSteps}>
+                How It Works
+              </a>
             </div>
-          </div>
-          <div className="fixed bottom-0 w-full text-center bg-brand border-t border-slate-500 p-6 z-50">
-            <button onClick={handlePurchase} className="cta btn btn-primary glow w-80">
-              {t('cta-start')} - 9.99€
-            </button>
+
+            <Socials label={t('seen-on')} />
           </div>
         </div>
         <section ref={demoRef}>
-          <div className="mx-auto text-center p-12">
-            <h2 className="uppercase tracking-widest p-6">
+          <div className="mx-auto p-6 text-center">
+            <h2 className="p-6 uppercase tracking-widest">
               15 unique images in 5 different anime styles
             </h2>
             <div className="flex justify-center space-x-6">
@@ -140,7 +100,7 @@ export default function Home(_props: Props) {
         </section>
         <hr className="w-full border-slate-500" />
         <section ref={stepsRef}>
-          <h2 className="uppercase tracking-widest text-center">
+          <h2 className="text-center uppercase tracking-widest">
             Get your images in 3 simple steps
           </h2>
           <Steps />
@@ -187,6 +147,11 @@ export default function Home(_props: Props) {
             affiliated with foreign governments with might get your data!
           </p>
         </section> */}
+        <div className="fixed bottom-0 z-50 w-full border-t border-slate-500 bg-brand p-6 text-center">
+          <button onClick={handlePurchase} className="cta glow btn-primary btn w-80">
+            {t('cta-start')} - 9.99€
+          </button>
+        </div>
       </main>
     </>
   );
