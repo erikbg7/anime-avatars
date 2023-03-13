@@ -1,4 +1,5 @@
 import { DiffusionRunInput } from '@/server/services/diffusion/types';
+import { KAWAII_PROMPTS, NARUTO_PROMPTS, SHONEN_PROMPTS } from '@/utils/prompts';
 import DiffussionImage from './DiffusionImage';
 
 const buildPrompt = (
@@ -9,7 +10,7 @@ const buildPrompt = (
 ) => {
   return {
     prompt:
-      'portrait of an adult {genre} with 2 animal ears in a cherry blossom tree background, kawaii anime style, masterpiece, high quality',
+      'portrait of Cyberpunk samurai chibi {genre}, cinematic lighting, horror, ultra detail, ultra realistic, photo realistic',
     prompt_strength: strength,
     num_inference_steps: steps || 40,
     guidance_scale: cfg,
@@ -31,7 +32,7 @@ type Props = { url: string; genre: string };
 function DiffusionGrid({ url, genre }: Props) {
   return (
     <div className="grid grid-cols-4">
-      {gridPrompts.map((p, i) => (
+      {/* {KAWAII_PROMPTS.map((p, i) => (
         <div key={i} className="flex flex-col items-center">
           <DiffussionImage url={url} genre={genre} prompt={p} description={''} />
           <div>
@@ -40,6 +41,24 @@ function DiffusionGrid({ url, genre }: Props) {
           <div>Steps: {p.num_inference_steps}</div>
         </div>
       ))}
+      {SHONEN_PROMPTS.map((p, i) => (
+        <div key={i} className="flex flex-col items-center">
+          <DiffussionImage url={url} genre={genre} prompt={p} description={''} />
+          <div>
+            CFG: {p.guidance_scale} - Strength: {p.prompt_strength}
+          </div>
+          <div>Steps: {p.num_inference_steps}</div>
+        </div>
+      ))}
+      {NARUTO_PROMPTS.map((p, i) => (
+        <div key={i} className="flex flex-col items-center">
+          <DiffussionImage url={url} genre={genre} prompt={p} description={''} />
+          <div>
+            CFG: {p.guidance_scale} - Strength: {p.prompt_strength}
+          </div>
+          <div>Steps: {p.num_inference_steps}</div>
+        </div>
+      ))} */}
     </div>
   );
 }

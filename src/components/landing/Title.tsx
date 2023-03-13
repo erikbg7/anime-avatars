@@ -11,11 +11,11 @@ type Props = {
 function Title(props: Props) {
   return (
     <h1
-      className={`flex flex-col max-w-2xl mb-6 text-5xl md:text-7xl font-semibold ${shibuya.className}`}
+      className={`flex max-w-2xl flex-col text-4xl font-semibold md:text-7xl ${shibuya.className}`}
     >
       {props.line1}
       <span
-        className={`${shibuya.className} tracking-wider text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-purple-400 to-pink-600 mt-4`}
+        className={`${shibuya.className} bg-gradient-to-b from-purple-400 to-pink-600 bg-clip-text text-5xl tracking-wider text-transparent md:text-8xl`}
       >
         {props.line2}
       </span>

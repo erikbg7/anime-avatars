@@ -16,27 +16,27 @@ function Socials(props: Props) {
       <p className="mr-6 text-xs opacity-50">{props.label}</p>
       <Image
         alt="techcrunch social logo"
-        className="filter-to-white my-2 mr-6 h-6 w-auto"
+        className="filter-to-white my-2 mr-6 h-4 w-auto md:h-6"
         src={techCrunchLogo}
       />
       <Image
         alt="stability social logo"
-        className="filter-to-white my-2 mr-6 h-6 w-auto"
+        className="filter-to-white my-2 mr-6 h-4 w-auto md:h-6"
         src={stabilityLogo}
       />
       <Image
         alt="fstoppers social logo"
-        className="filter-to-white my-2 mr-6 h-6 w-auto"
+        className="filter-to-white my-2 mr-6 h-4 w-auto md:h-6"
         src={fstoppersLogo}
       />
       <Image
         alt="tiktok social logo"
-        className="filter-to-white my-2 mr-6 h-6 w-auto"
+        className="filter-to-white my-2 mr-6 h-4 w-auto md:h-6"
         src={tiktokLogo}
       />
       <Image
         alt="instagram social logo"
-        className="filter-to-white mr-6 mt-3 mb-2 h-6 w-auto"
+        className="filter-to-white mr-6 mt-3 mb-2 h-4 w-auto md:h-6"
         src={instagramLogo}
       />
     </div>

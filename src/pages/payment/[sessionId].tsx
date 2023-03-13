@@ -72,7 +72,7 @@ const DiffusionStyleSection = ({
   title: string;
 }) => {
   return (
-    <section className="prose max-w-[70%] mx-auto">
+    <section className="prose mx-auto max-w-[70%]">
       <h2>{title}</h2>
       <div className="flex justify-center">
         {prompts.map((prompt, i) => (

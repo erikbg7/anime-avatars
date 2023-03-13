@@ -48,7 +48,7 @@ export default function Home(_props: Props) {
           style={{ backgroundImage: `url("/night-bg.gif")` }}
         >
           <div className="hero-overlay bg-black bg-opacity-60"></div>
-          <div className="hero-content flex h-full flex-col justify-around pb-32 pt-32 text-center text-white">
+          <div className="hero-content flex h-full flex-col justify-center pb-32 pt-12 text-center text-white">
             <Title line1={t('title.line-1')} line2={t('title.line-2')} line3={t('title.line-3')} />
             <div>
               <p className="my-2 text-lg">🔒 {t('features.payment')}</p>
@@ -56,7 +56,7 @@ export default function Home(_props: Props) {
               <p className="my-2 text-lg">🌀 {t('features.amount')}</p>
               <p className="my-2 text-lg">🎆 {t('features.description')}</p>
             </div>
-            <div className="flex flex-col items-center space-y-2">
+            <div className="mt-6 flex flex-col items-center space-y-2">
               <a className="link" onClick={scrollToDemo}>
                 Results
               </a>
@@ -65,11 +65,13 @@ export default function Home(_props: Props) {
               </a>
             </div>
 
-            <Socials label={t('seen-on')} />
+            <div className="absolute bottom-6">
+              <Socials label={t('seen-on')} />
+            </div>
           </div>
         </div>
         <section ref={demoRef}>
-          <div className="mx-auto p-6 text-center">
+          <div className="mx-auto p-3 text-center">
             <h2 className="p-6 uppercase tracking-widest">
               15 unique images in 5 different anime styles
             </h2>
@@ -79,22 +81,6 @@ export default function Home(_props: Props) {
               <div className="text-sm">💥 Shonen</div>
               <div className="text-sm">🌀 Naruto</div>
             </div>
-
-            {/* <h2 className="text-3xl font-bold mb-6">🌀 Get 5 different anime styles</h2>
-            <p>
-              After payment you can select up to 15 styles you want from the ones below. For each
-              style we'll generate 8 avatars, for a total of 120+ avatars. With AI, results can
-              vary, so we generate a lot of avatars so you can pick the best ones! Transform
-              yourself (or your dog, cat, or you and your bf/gf as a couple) into desert punk
-              warriors, a zombie at Halloween, an Instagram model in the jungle, the main character
-              in a video game to a fashion model. Its up to you to decide who you want to become!
-              Your AI avatars will look just like you but in the styles you select.
-            </p>
-            <div>💕 Kawaii</div>
-            <div>🤖 Mecha</div>
-            <div>💥 Shonen</div>
-            <div>🌀 Naruto</div>
-             */}
             <Demo />
           </div>
         </section>
