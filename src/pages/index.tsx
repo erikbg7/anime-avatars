@@ -72,9 +72,9 @@ export default function Home(_props: Props) {
             </div>
           </div>
         </div>
-        <section ref={demoRef}>
-          <div className="mx-auto p-3 text-center">
-            <h2 className="p-6 uppercase tracking-widest">
+        <section ref={demoRef} className="mx-auto px-3 pb-24 pt-12 text-center">
+          <div className="px-6 pt-6 pb-12">
+            <h2 className="uppercase tracking-widest">
               15 unique images in 5 different anime styles
             </h2>
             <div className="flex justify-center space-x-6">
@@ -83,14 +83,18 @@ export default function Home(_props: Props) {
               <div className="text-sm">💥 Shonen</div>
               <div className="text-sm">🌀 Naruto</div>
             </div>
-            <Demo />
           </div>
+          <Demo />
         </section>
+
         <hr className="w-full border-slate-500" />
-        <section ref={stepsRef}>
-          <h2 className="text-center uppercase tracking-widest">
-            Get your images in 3 simple steps
-          </h2>
+
+        <section ref={stepsRef} className="mx-auto px-3 pb-24 pt-12 text-center">
+          <div className="px-6 pt-6 pb-12">
+            <h2 className="text-center uppercase tracking-widest">
+              Get your images in 3 simple steps
+            </h2>
+          </div>
           <Steps />
         </section>
 

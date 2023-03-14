@@ -51,7 +51,7 @@ type StepSectionProps = {
 
 function StepSection(props: StepSectionProps) {
   return (
-    <section className="flex flex-col mx-auto items-center p-8">
+    <section className="mx-auto flex flex-col items-center p-6">
       <span
         className={clsx('h-24 w-[1px] bg-gradient-to-b from-brand to-blue-400', {
           'to-blue-400': props.schema === 'blue',
@@ -61,7 +61,7 @@ function StepSection(props: StepSectionProps) {
       ></span>
       <span
         className={clsx(
-          'flex justify-center items-center bg-gradient-to-r  rounded-full w-10 h-10 text-brand text-md font-bold',
+          'text-md flex h-10 w-10  items-center justify-center rounded-full bg-gradient-to-r font-bold text-brand',
           {
             'from-blue-600 to-teal-300': props.schema === 'blue',
             'from-purple-600 to-pink-700': props.schema === 'pink',
@@ -73,7 +73,7 @@ function StepSection(props: StepSectionProps) {
       </span>
       <h3
         className={clsx(
-          'text-transparent bg-clip-text bg-gradient-to-r mt-4 text-4xl font-semibold',
+          'mt-4 bg-gradient-to-r bg-clip-text text-4xl font-semibold text-transparent',
           {
             'from-blue-600 to-teal-300': props.schema === 'blue',
             'from-purple-600 to-pink-600': props.schema === 'pink',
@@ -83,10 +83,10 @@ function StepSection(props: StepSectionProps) {
       >
         {props.title}
       </h3>
-      <h4 className="text-white text-center text-4xl sm:text-5xl md:text-6xl font-bold my-10 opacity-90">
+      <h4 className="my-10 text-center text-4xl font-bold text-white opacity-90 sm:text-5xl md:text-6xl">
         {props.subtitle}
       </h4>
-      <p className="text-2xl max-w-4xl md:px-32 mb-12 text-neutral-500 font-light text-center">
+      <p className="mb-12 max-w-4xl text-center text-2xl font-light text-neutral-500 md:px-32">
         {props.description}
       </p>
       {props.children || null}
@@ -97,31 +97,31 @@ function StepSection(props: StepSectionProps) {
 function CreditCard() {
   return (
     <div className="text-white">
-      <div className="flex flex-col relative px-6 py-4 w-72 bg-slate-800 rounded-lg mx-auto">
-        <span className="text-right font-bold mb-2 ">CREDIT CARD</span>
-        <div className="rounded-md grid grid-cols-3 gap-1 overflow-hidden w-16">
+      <div className="relative mx-auto flex w-72 flex-col rounded-lg bg-slate-800 px-6 py-4">
+        <span className="mb-2 text-right font-bold ">CREDIT CARD</span>
+        <div className="grid w-16 grid-cols-3 gap-1 overflow-hidden rounded-md">
           <div className="grid grid-rows-3 gap-1">
-            <div className="bg-gray-400/30 h-3"></div>
-            <div className="bg-gray-400/30 h-3"></div>
-            <div className="bg-gray-400/30 h-3"></div>
+            <div className="h-3 bg-gray-400/30"></div>
+            <div className="h-3 bg-gray-400/30"></div>
+            <div className="h-3 bg-gray-400/30"></div>
           </div>
 
           <div className="bg-gray-400/30"></div>
 
           <div className="grid grid-rows-3 gap-1">
-            <div className="bg-gray-400/30 h-3"></div>
-            <div className="bg-gray-400/30 h-3"></div>
-            <div className="bg-gray-400/30 h-3"></div>
+            <div className="h-3 bg-gray-400/30"></div>
+            <div className="h-3 bg-gray-400/30"></div>
+            <div className="h-3 bg-gray-400/30"></div>
           </div>
         </div>
-        <div className="flex justify-between my-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-300 text-lg font-mono tracking-widest">
+        <div className="my-2 flex justify-between bg-gradient-to-r from-blue-600 to-teal-300 bg-clip-text font-mono text-lg tracking-widest text-transparent">
           <span>1234</span>
           <span>5678</span>
           <span>****</span>
           <span>****</span>
         </div>
-        <div className="flex justify-between items-center my-2">
-          <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-300">
+        <div className="my-2 flex items-center justify-between">
+          <div className="bg-gradient-to-r from-blue-600 to-teal-300 bg-clip-text text-transparent">
             John Doe
           </div>
           <VisaLogo />
@@ -129,10 +129,10 @@ function CreditCard() {
         </div>
       </div>
 
-      <div className="flex justify-center items-center text-center py-12 space-x-6">
-        <VisaLogo className="filter-to-gray w-16 h-20" />
+      <div className="flex items-center justify-center space-x-6 py-12 text-center">
+        <VisaLogo className="filter-to-gray h-20 w-16" />
         <StripeLogo />
-        <MasterCardLogo className="filter-to-gray w-16 h-16 opacity-40" />
+        <MasterCardLogo className="filter-to-gray h-16 w-16 opacity-40" />
       </div>
     </div>
   );
