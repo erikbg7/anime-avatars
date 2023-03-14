@@ -4,9 +4,8 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 
+import { trpc } from '@/utils/trpc';
 import styles from '@/styles/Home.module.css';
-import { trpc } from '../utils/trpc';
-import { getStripe } from '@/utils/stripe';
 import Logo from '@/components/Logo';
 import Demo from '@/components/Demo';
 import Steps from '@/components/Steps';
@@ -22,9 +21,12 @@ export default function Home(_props: Props) {
   const purchase = trpc.payments.purchase.useMutation();
 
   const handlePurchase = async () => {
-    const stripe = await getStripe();
-    const { id } = await purchase.mutateAsync();
-    stripe?.redirectToCheckout({ sessionId: id });
+    import(/* webpackPrefetch: true */ '@/utils/stripe' /* webpackChunkName: "stripeChunk" */)
+      .then(({ getStripe }) => getStripe())
+      .then(async (stripe) => {
+        const { id } = await purchase.mutateAsync();
+        stripe?.redirectToCheckout({ sessionId: id });
+      });
   };
 
   const scrollToDemo = () =>
@@ -43,11 +45,11 @@ export default function Home(_props: Props) {
       </Head>
       <main className={styles.main}>
         <Logo />
-        <div
-          className="hero relative z-50 min-h-screen"
-          style={{ backgroundImage: `url("/night-bg.gif")` }}
-        >
-          <div className="hero-overlay bg-black bg-opacity-60"></div>
+        <div className="hero relative z-50 min-h-screen">
+          <video className="absolute -z-10 h-full w-full object-cover" autoPlay muted loop>
+            <source src="night-bg.webm" type="video/webm" />
+          </video>
+          <div className="hero-overlay bg-opacity-60 bg-gradient-to-br from-black/5 via-black/10 to-black/30"></div>
           <div className="hero-content flex h-full flex-col justify-center pb-32 pt-12 text-center text-white">
             <Title line1={t('title.line-1')} line2={t('title.line-2')} line3={t('title.line-3')} />
             <div>

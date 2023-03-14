@@ -18,3 +18,5 @@
 //     seed: 60144,
 //   },
 // ];
+
+export const a = 2;

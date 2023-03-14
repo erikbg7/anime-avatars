@@ -107,14 +107,14 @@ export default function Demo() {
         />
       </div>
       <div className="grid grid-cols-4">
-        {results.kawaii.map((result) => (
-          <DemoResult alt="portrait 1" src={result} label="💕 Kawaii" />
+        {results.kawaii.map((result, i) => (
+          <DemoResult key={`kawaii-${i}`} alt="portrait 1" src={result} label="💕 Kawaii" />
         ))}
-        {results.shonen.map((result) => (
-          <DemoResult alt="portrait 1" src={result} label="💥 Shonen" />
+        {results.shonen.map((result, i) => (
+          <DemoResult key={`shonen-${i}`} alt="portrait 1" src={result} label="💥 Shonen" />
         ))}
-        {results.naruto.map((result) => (
-          <DemoResult alt="portrait 1" src={result} label="🌀 Naruto" />
+        {results.naruto.map((result, i) => (
+          <DemoResult key={`naruto-${i}`} alt="portrait 1" src={result} label="🌀 Naruto" />
         ))}
       </div>
     </>
