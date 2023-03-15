@@ -45,7 +45,7 @@ export default function Home(_props: Props) {
       </Head>
       <main className={styles.main}>
         <Logo />
-        <div className="hero relative z-50 min-h-screen">
+        <div className="hero relative z-40 min-h-screen">
           <video className="absolute -z-10 h-full w-full object-cover" autoPlay muted loop>
             <source src="night-bg.webm" type="video/webm" />
           </video>

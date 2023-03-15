@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Image, { StaticImageData } from 'next/image';
 
 import portrait_1 from '@/public/demo/portrait_1.jpeg';
@@ -23,6 +23,8 @@ import womanNaruto4 from '@/public/demo/woman/naruto4.png';
 
 import normalArrow from '@/public/demo/arrow.png';
 import curvedArrow from '@/public/demo/arrow2.png';
+
+import ImageModal, { ImageModalHandler } from './landing/ImageModal';
 
 const DEMO = [
   {
@@ -49,22 +51,29 @@ type Props = {
   src: StaticImageData;
   label: string;
   alt: string;
+  onClick: () => void;
 };
 
 function DemoResult(props: Props) {
   return (
-    <div className="relative m-2 h-24 w-24 cursor-pointer overflow-hidden rounded-xl md:m-4 md:h-48 md:w-48">
-      <Image alt={props.alt} src={props.src} fill className="object-cover" />
-      <div className="absolute bottom-0 right-0 z-10 rounded-tl-md bg-black/50 px-2 text-sm text-white">
-        {props.label}
+    <label htmlFor="image-modal" onClick={props.onClick}>
+      <div className="relative m-2 h-24 w-24 cursor-pointer overflow-hidden rounded-xl md:m-4 md:h-48 md:w-48">
+        <Image alt={props.alt} src={props.src} fill className="object-cover" />
+        <div className="absolute bottom-0 right-0 z-10 rounded-tl-md bg-black/50 px-2 text-sm text-white">
+          {props.label}
+        </div>
       </div>
-    </div>
+    </label>
   );
 }
 
 export default function Demo() {
   const [selected, setSelected] = useState<number>(1);
+  const imageModalRef = useRef<ImageModalHandler>(null);
+
   const results = DEMO[selected];
+
+  const setModalImage = (image: StaticImageData | string) => imageModalRef.current?.setImage(image);
 
   return (
     <>
@@ -100,18 +109,44 @@ export default function Demo() {
 
       <div className="flex flex-wrap justify-center md:grid md:grid-cols-4">
         {results.kawaii.map((result, i) => (
-          <DemoResult key={`kawaii-${i}`} alt="portrait 1" src={result} label="💕 Kawaii" />
+          <DemoResult
+            key={`kawaii-${i}`}
+            alt="portrait 1"
+            src={result}
+            label="💕 Kawaii"
+            onClick={() => setModalImage(result)}
+          />
         ))}
         {results.shonen.map((result, i) => (
-          <DemoResult key={`shonen-${i}`} alt="portrait 1" src={result} label="💥 Shonen" />
+          <DemoResult
+            key={`shonen-${i}`}
+            alt="portrait 1"
+            src={result}
+            label="💥 Shonen"
+            onClick={() => setModalImage(result)}
+          />
         ))}
         {results.naruto.map((result, i) => (
-          <DemoResult key={`naruto-${i}`} alt="portrait 1" src={result} label="🌀 Naruto" />
+          <DemoResult
+            key={`naruto-${i}`}
+            alt="portrait 1"
+            src={result}
+            label="🌀 Naruto"
+            onClick={() => setModalImage(result)}
+          />
         ))}
         {results.naruto.map((result, i) => (
-          <DemoResult key={`naruto-${i}`} alt="portrait 1" src={result} label="🌀 Naruto" />
+          <DemoResult
+            key={`naruto-${i}`}
+            alt="portrait 1"
+            src={result}
+            label="🌀 Naruto"
+            onClick={() => setModalImage(result)}
+          />
         ))}
       </div>
+
+      <ImageModal ref={imageModalRef} />
     </>
   );
 }
