@@ -1,5 +1,13 @@
 import { DiffusionRunInput } from '@/server/services/diffusion/types';
 
+export const buildImagePrompt = (prompt: DiffusionRunInput, genre: string, url: string) => {
+  return {
+    ...prompt,
+    init_image: url,
+    prompt: prompt.prompt.replace('{genre}', genre),
+  };
+};
+
 const buildPromptInput = (
   prompt: DiffusionRunInput['prompt'],
   cfg: DiffusionRunInput['guidance_scale'],

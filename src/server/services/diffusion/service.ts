@@ -32,6 +32,8 @@ export const createDiffusionService = () => {
       .input(runDiffusionInputSchema)
       .output(runDiffusionOutputSchema)
       .mutation(async ({ input }) => {
+        console.log('Creating');
+        return { data: 'hey' };
         const res = await fetch(config.CREATE.ENDPOINT, {
           body: JSON.stringify({ input }),
           ...config.CREATE.CONFIG,

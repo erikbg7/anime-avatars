@@ -31,10 +31,10 @@ type Props = { url: string; genre: string };
 
 function DiffusionGrid({ url, genre }: Props) {
   return (
-    <div className="grid grid-cols-4">
-      {/* {KAWAII_PROMPTS.map((p, i) => (
+    <div className="grid grid-cols-2 md:grid-cols-4">
+      {KAWAII_PROMPTS.map((p, i) => (
         <div key={i} className="flex flex-col items-center">
-          <DiffussionImage url={url} genre={genre} prompt={p} description={''} />
+          <DiffussionImage url={url} genre={genre} prompt={p} icon="💕" />
           <div>
             CFG: {p.guidance_scale} - Strength: {p.prompt_strength}
           </div>
@@ -43,7 +43,7 @@ function DiffusionGrid({ url, genre }: Props) {
       ))}
       {SHONEN_PROMPTS.map((p, i) => (
         <div key={i} className="flex flex-col items-center">
-          <DiffussionImage url={url} genre={genre} prompt={p} description={''} />
+          <DiffussionImage url={url} genre={genre} prompt={p} icon="💥" />
           <div>
             CFG: {p.guidance_scale} - Strength: {p.prompt_strength}
           </div>
@@ -52,13 +52,13 @@ function DiffusionGrid({ url, genre }: Props) {
       ))}
       {NARUTO_PROMPTS.map((p, i) => (
         <div key={i} className="flex flex-col items-center">
-          <DiffussionImage url={url} genre={genre} prompt={p} description={''} />
+          <DiffussionImage url={url} genre={genre} prompt={p} icon="🌀" />
           <div>
             CFG: {p.guidance_scale} - Strength: {p.prompt_strength}
           </div>
           <div>Steps: {p.num_inference_steps}</div>
         </div>
-      ))} */}
+      ))}
     </div>
   );
 }

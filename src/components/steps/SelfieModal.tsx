@@ -5,12 +5,12 @@ type Props = {
   onCapture: (image: string) => void;
 };
 
-function SelfieModal(props: Props) {
+function SelfieModal({ onCapture }: Props) {
   const webcamRef = React.useRef<any>(null);
   const capture = React.useCallback(() => {
     if (!webcamRef.current) return;
     const imageSrc = webcamRef.current?.getScreenshot?.();
-    props.onCapture(imageSrc);
+    onCapture(imageSrc);
   }, [webcamRef]);
 
   return (
@@ -18,7 +18,7 @@ function SelfieModal(props: Props) {
       <input type="checkbox" id="selfie-modal" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Take a selfie!</h3>
+          <h3 className="text-lg font-bold">Take a selfie!</h3>
           <p className="py-4">
             <Webcam
               ref={webcamRef}

@@ -5,11 +5,11 @@ import { DiffusionRunInput } from '@/server/services/diffusion/types';
 type Props = {
   url: string;
   genre: string;
-  description: string;
   prompt: DiffusionRunInput;
+  icon: string;
 };
 
-export default function DiffussionImage({ url, genre, prompt, description }: Props) {
+export default function DiffussionImage({ prompt, genre, url, icon }: Props) {
   const effectCalled = useRef(false);
   const [finished, setFinished] = useState(false);
   const [resultImage, setResultImage] = useState<string>();
@@ -31,6 +31,11 @@ export default function DiffussionImage({ url, genre, prompt, description }: Pro
             setResultImage(image);
             setFinished(true);
           }
+
+          if (result?.status === 'FAILED') {
+            // Show toast, user wont be charged, try again later
+          }
+
           console.log({ result: result?.status, o: result?.output });
           return result;
         };
@@ -41,18 +46,13 @@ export default function DiffussionImage({ url, genre, prompt, description }: Pro
   });
 
   useLayoutEffect(() => {
-    if (!finished && !effectCalled.current) {
-      const { prompt: rawPrompt, ...config } = prompt;
-      effectCalled.current = true;
-      setTimeout(() => {
-        diffusion.mutate({
-          init_image: url,
-          prompt: rawPrompt.replace('{genre}', genre).concat(', ').concat(description),
-          ...config,
-        });
-      }, Math.random() * 1000);
-    }
-  }, [url, finished]);
+    //   if (!finished && !effectCalled.current) {
+    //     effectCalled.current = true;
+    //     setTimeout(() => {
+    //       diffusion.mutate(buildImagePrompt(prompt, genre, url));
+    //     }, Math.random() * 1000);
+    //   }
+  }, [finished, genre, url]);
 
   if (resultImage && finished) {
     return (
@@ -71,8 +71,12 @@ export default function DiffussionImage({ url, genre, prompt, description }: Pro
   }
 
   return (
-    <div>
-      <img src={url} width={200} height={200} className="blur-md" />
+    <div className="relative mx-auto h-36 w-36">
+      <div className="absolute bottom-0 top-0 left-0 right-0 z-10 flex flex-col items-center justify-center">
+        <span className="text-border mx-4 text-2xl">{icon}</span>
+        <span className="text-border">Loading...</span>
+      </div>
+      <img src={url} className="blur-md" />
     </div>
   );
 }
