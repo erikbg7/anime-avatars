@@ -38,6 +38,9 @@ function DiffusionSteps({ session_id, setDiffusionParams }: Props) {
 
     if (!content || !genre) return;
 
+    // const diffusionParams = {}
+    // const a = new URLSearchParams({diffusion: })
+
     setLoading(true);
 
     const token = await getToken.mutateAsync({ id: session_id });
@@ -57,36 +60,32 @@ function DiffusionSteps({ session_id, setDiffusionParams }: Props) {
   };
 
   return (
-    <Layout>
-      <div className="py-20">
-        <div className="flex flex-col md:flex-row">
-          <div className="flex-1">
-            <ImagePreview ref={imagePreviewRef} />
-          </div>
-          {step === STEPS.UPLOAD && (
-            <div className="flex-1">
-              <UploadStep onImageUploaded={handlePreviewChange} />
-            </div>
-          )}
+    <div className="flex flex-col md:flex-row">
+      <div className="flex-1">
+        <ImagePreview ref={imagePreviewRef} />
+      </div>
+      {step === STEPS.UPLOAD && (
+        <div className="flex-1">
+          <UploadStep onImageUploaded={handlePreviewChange} />
+        </div>
+      )}
+      {step === STEPS.GENRE && (
+        <div className="flex-1">
           {step === STEPS.GENRE && (
             <div className="flex-1">
-              {step === STEPS.GENRE && (
-                <div className="flex-1">
-                  <GenreInput ref={genreInputRef} />
-                  <button
-                    disabled={loading}
-                    className="btn-primary btn-block btn"
-                    onClick={handleDiffusion}
-                  >
-                    {loading ? 'Loading' : 'Post'}
-                  </button>
-                </div>
-              )}
+              <GenreInput ref={genreInputRef} />
+              <button
+                disabled={loading}
+                className="btn-primary btn-block btn"
+                onClick={handleDiffusion}
+              >
+                {loading ? 'Loading' : 'Post'}
+              </button>
             </div>
           )}
         </div>
-      </div>
-    </Layout>
+      )}
+    </div>
   );
 }
 

@@ -27,7 +27,7 @@ const ImagePreview = React.forwardRef<ImagePreviewHandler>((_, ref) => {
   }));
 
   return (
-    <div className="mx-6 max-w-lg overflow-hidden rounded-md">
+    <div className="mx-6 mb-3 max-w-lg overflow-hidden rounded-md">
       <img className="aspect-square h-full w-full object-cover" src={image} />
     </div>
   );

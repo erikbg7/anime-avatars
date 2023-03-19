@@ -18,10 +18,10 @@ function UploadStep(props: Props) {
         accept="image/*"
         multiple={false}
         onChange={handleSelectedFile}
-        className="file-input-bordered file-input-primary file-input w-full max-w-xs"
+        className="file-input-bordered file-input-primary file-input mb-3 w-full md:max-w-xs"
       />
 
-      <label htmlFor="selfie-modal" className="btn-primary btn w-full">
+      <label htmlFor="selfie-modal" className="btn-primary btn mb-3 w-full">
         Take Selfie
       </label>
 

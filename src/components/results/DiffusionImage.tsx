@@ -1,19 +1,32 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { trpc } from '@/utils/trpc';
 import { DiffusionRunInput } from '@/server/services/diffusion/types';
+import { buildImagePrompt } from '@/utils/prompts';
+import clsx from 'clsx';
 
 type Props = {
   url: string;
   genre: string;
   prompt: DiffusionRunInput;
   icon: string;
+  onImageClicked: (url: string) => void;
+  onImageGenerated: (url: string) => void;
 };
 
-export default function DiffussionImage({ prompt, genre, url, icon }: Props) {
+export default function DiffussionImage({
+  prompt,
+  genre,
+  url,
+  icon,
+  onImageClicked,
+  onImageGenerated,
+}: Props) {
   const effectCalled = useRef(false);
   const [finished, setFinished] = useState(false);
   const [resultImage, setResultImage] = useState<string>();
   const diffusionStatus = trpc.diffusion.retrieve.useMutation();
+
+  const isResultReady = finished && resultImage;
 
   const diffusion = trpc.diffusion.create.useMutation({
     onSuccess: async (data) => {
@@ -30,6 +43,7 @@ export default function DiffussionImage({ prompt, genre, url, icon }: Props) {
             const image = result?.output[0]?.image;
             setResultImage(image);
             setFinished(true);
+            onImageGenerated(image);
           }
 
           if (result?.status === 'FAILED') {
@@ -46,37 +60,34 @@ export default function DiffussionImage({ prompt, genre, url, icon }: Props) {
   });
 
   useLayoutEffect(() => {
-    //   if (!finished && !effectCalled.current) {
-    //     effectCalled.current = true;
-    //     setTimeout(() => {
-    //       diffusion.mutate(buildImagePrompt(prompt, genre, url));
-    //     }, Math.random() * 1000);
-    //   }
+    if (!finished && !effectCalled.current) {
+      effectCalled.current = true;
+      setTimeout(() => {
+        diffusion.mutate(buildImagePrompt(prompt, genre, url));
+      }, Math.random() * 1000);
+    }
   }, [finished, genre, url]);
 
-  if (resultImage && finished) {
-    return (
-      <div className="flex flex-col items-center">
-        <img src={resultImage} width={200} height={200} />
-        <button
-          onClick={() => {
-            effectCalled.current = false;
-            setFinished(false);
-          }}
-        >
-          Retry
-        </button>
-      </div>
-    );
-  }
+  const handleImageClick = () => {
+    if (!isResultReady) return;
+    onImageClicked(resultImage);
+  };
 
   return (
-    <div className="relative mx-auto h-36 w-36">
-      <div className="absolute bottom-0 top-0 left-0 right-0 z-10 flex flex-col items-center justify-center">
-        <span className="text-border mx-4 text-2xl">{icon}</span>
-        <span className="text-border">Loading...</span>
-      </div>
-      <img src={url} className="blur-md" />
+    <div className="relative mx-auto w-36">
+      {!isResultReady && (
+        <div className="absolute bottom-0 top-0 left-0 right-0 z-10 flex flex-col items-center justify-center">
+          <span className="text-border mx-4 text-2xl">{icon}</span>
+          <span className="text-border">Loading...</span>
+        </div>
+      )}
+      <label htmlFor="image-modal">
+        <img
+          onClick={handleImageClick}
+          src={isResultReady ? resultImage : url}
+          className={clsx(!isResultReady && 'blur-md', 'rounded-lg')}
+        />
+      </label>
     </div>
   );
 }

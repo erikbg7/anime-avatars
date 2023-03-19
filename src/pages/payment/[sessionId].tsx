@@ -1,11 +1,11 @@
 import React from 'react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
-import Logo from '@/components/Logo';
 import DiffusionSteps from '@/components/steps/DiffusionSteps';
 import DiffusionResults from '@/components/results/DiffusionResults';
 
 import { trpc } from '@/utils/trpc';
+import Layout from '@/components/PageLayout';
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 export type DiffusionParams = {
@@ -22,15 +22,13 @@ export default function PaymentPage(props: Props) {
   if (data.isDiffusionDone) return <div>Diffusion is already done</div>;
 
   return (
-    <main className="relative">
-      <Logo />
-
+    <Layout>
       {!!diffusionParams ? (
         <DiffusionResults diffusionParams={diffusionParams} />
       ) : (
         <DiffusionSteps session_id={props.sessionId} setDiffusionParams={setDiffusionParams} />
       )}
-    </main>
+    </Layout>
   );
 }
 

@@ -38,11 +38,16 @@ const saveZip = (filename: string, urls: string[]) => {
   const folder = zip.folder(filename); // folder name where all files will be placed in
 
   urls.forEach((url, index) => {
-    const blobPromise = fetch(url).then((r) => {
-      if (r.status === 200) return r.blob();
+    const blobPromise = fetch(url, { mode: 'no-cors' }).then((r) => {
+      console.log({ r });
+      if (r.status === 200 || r.status === 0) return r.blob();
       return Promise.reject(new Error(r.statusText));
     });
-    const name = index.toString().concat(url.substring(url.lastIndexOf('/') + 1));
+    const name = index
+      .toString()
+      .concat(url.substring(url.lastIndexOf('/') + 1))
+      .split('?')[0];
+    console.log({ name, blobPromise });
     folder && folder.file(name, blobPromise);
   });
 
