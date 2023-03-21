@@ -1,6 +1,10 @@
 import { DiffusionRunInput } from '@/server/services/diffusion/types';
 
-export const buildImagePrompt = (prompt: DiffusionRunInput, genre: string, url: string) => {
+export const buildImagePrompt = (
+  prompt: DiffusionRunInput['diffusion'],
+  genre: string,
+  url: string
+) => {
   return {
     ...prompt,
     init_image: url,
@@ -9,11 +13,14 @@ export const buildImagePrompt = (prompt: DiffusionRunInput, genre: string, url: 
 };
 
 const buildPromptInput = (
-  prompt: DiffusionRunInput['prompt'],
-  cfg: DiffusionRunInput['guidance_scale'],
-  strength: DiffusionRunInput['prompt_strength'],
-  steps: DiffusionRunInput['num_inference_steps'],
-  options?: { seed?: DiffusionRunInput['seed']; scheduler?: DiffusionRunInput['scheduler'] }
+  prompt: DiffusionRunInput['diffusion']['prompt'],
+  cfg: DiffusionRunInput['diffusion']['guidance_scale'],
+  strength: DiffusionRunInput['diffusion']['prompt_strength'],
+  steps: DiffusionRunInput['diffusion']['num_inference_steps'],
+  options?: {
+    seed?: DiffusionRunInput['diffusion']['seed'];
+    scheduler?: DiffusionRunInput['diffusion']['scheduler'];
+  }
 ) => {
   return {
     prompt: prompt,
@@ -36,28 +43,28 @@ const PROMPTS = {
     'portrait of an adult {genre} with konoha headband, naruto headband, sharingan eye,, shonen anime style, masterpiece, best quality',
 };
 
-export const KAWAII_PROMPTS: DiffusionRunInput[] = [
+export const KAWAII_PROMPTS: DiffusionRunInput['diffusion'][] = [
   buildPromptInput(PROMPTS.KAWAII, 10, 0.85, 30, { scheduler: 'EULER-A' }),
   buildPromptInput(PROMPTS.KAWAII, 10, 0.85, 50, { scheduler: 'EULER-A' }),
   buildPromptInput(PROMPTS.KAWAII, 10, 0.75, 30, { scheduler: 'EULER-A' }),
   buildPromptInput(PROMPTS.KAWAII, 10, 0.75, 50, { scheduler: 'EULER-A' }),
 ];
 
-export const SHONEN_PROMPTS: DiffusionRunInput[] = [
+export const SHONEN_PROMPTS: DiffusionRunInput['diffusion'][] = [
   buildPromptInput(PROMPTS.SHONEN, 6, 0.7, 70, { seed: 60144 }),
   buildPromptInput(PROMPTS.SHONEN, 10, 0.85, 70, { seed: 60144 }),
   buildPromptInput(PROMPTS.SHONEN, 10, 0.75, 50, { seed: 60144 }),
   buildPromptInput(PROMPTS.SHONEN, 10, 0.85, 40, { seed: 60144 }),
 ];
 
-export const NARUTO_PROMPTS: DiffusionRunInput[] = [
+export const NARUTO_PROMPTS: DiffusionRunInput['diffusion'][] = [
   buildPromptInput(PROMPTS.NARUTO, 6, 0.7, 70, { seed: 60144 }),
   buildPromptInput(PROMPTS.NARUTO, 10, 0.85, 70, { seed: 60144 }),
   buildPromptInput(PROMPTS.NARUTO, 10, 0.75, 50, { seed: 60144 }),
   buildPromptInput(PROMPTS.NARUTO, 10, 0.85, 40, { seed: 60144 }),
 ];
 
-export const MECHA: DiffusionRunInput[] = [
+export const MECHA: DiffusionRunInput['diffusion'][] = [
   {
     prompt:
       'portrait of an adult {genre} with scar on eye, scars around face, angry, lightnings in the background, lightnings, shonen anime style, masterpiece, best quality',

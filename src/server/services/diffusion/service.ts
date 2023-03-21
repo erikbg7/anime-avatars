@@ -1,4 +1,6 @@
 import { router, procedure } from '@/server/trpc';
+import { TRPCClientError } from '@trpc/client';
+import { TRPCError } from '@trpc/server';
 import { config } from './config';
 import {
   interrogateInputSchema,
@@ -31,21 +33,43 @@ export const createDiffusionService = () => {
     create: procedure
       .input(runDiffusionInputSchema)
       .output(runDiffusionOutputSchema)
-      .mutation(async ({ input }) => {
-        // console.log('Creating');
-        // return { data: 'hey' };
-        const res = await fetch(config.CREATE.ENDPOINT, {
-          body: JSON.stringify({ input }),
-          ...config.CREATE.CONFIG,
-        });
-
+      .mutation(async ({ ctx, input }) => {
+        const body = JSON.stringify({ input: input.diffusion });
+        const res = await fetch(config.CREATE.ENDPOINT, { body, ...config.CREATE.CONFIG });
         const data = await res.json();
+
+        const jobId = data?.id;
+
+        await ctx.supabase
+          .from('diffusions')
+          .insert({
+            job_id: jobId,
+            customer_id: input.customerId,
+            style: input.style,
+          })
+          .single();
+
+        return data;
+      }),
+    create2: procedure
+      .input(runDiffusionInputSchema)
+      .output(runDiffusionOutputSchema)
+      .mutation(async ({ input }) => {
+        const body = JSON.stringify({ input });
+        const res = await fetch(config.CREATE.ENDPOINT, { body, ...config.CREATE.CONFIG });
+        const data = await res.json();
+
         return data;
       }),
     retrieve: procedure.input(statusDiffusionInputSchema).mutation(async ({ input }) => {
       const endpoint = `${config.RETRIEVE.ENDPOINT}/${input.jobId}`;
       const res = await fetch(endpoint, config.RETRIEVE.CONFIG);
       const data = await res.json();
+
+      // if (data.status === 'COMPLETED') {
+      // }
+
+      // throw new TRPCClientError('Could not generate the image.');
       console.log({ data });
       return data;
     }),

@@ -11,14 +11,18 @@ const diffusionResultImageSchema = z.object({ image: z.string().url(), seed: z.n
 
 type DiffusionRunInput = z.infer<typeof runDiffusionInputSchema>;
 const runDiffusionInputSchema = z.object({
-  prompt: z.string(),
-  negative_prompt: z.string().optional(),
-  prompt_strength: z.number().min(0).max(1).optional(),
-  guidance_scale: z.number().min(1).max(20).optional(),
-  init_image: z.string().url().optional(),
-  scheduler: z.string().optional(),
-  num_inference_steps: z.number().min(0).max(500).optional(),
-  seed: z.number().optional(),
+  customerId: z.string(),
+  style: z.string(),
+  diffusion: z.object({
+    prompt: z.string(),
+    negative_prompt: z.string().optional(),
+    prompt_strength: z.number().min(0).max(1).optional(),
+    guidance_scale: z.number().min(1).max(20).optional(),
+    init_image: z.string().url().optional(),
+    scheduler: z.string().optional(),
+    num_inference_steps: z.number().min(0).max(500).optional(),
+    seed: z.number().optional(),
+  }),
 });
 
 type DiffusionRunOutput = z.infer<typeof runDiffusionOutputSchema>;

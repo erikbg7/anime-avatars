@@ -16,6 +16,7 @@ type Props = { diffusionParams: DiffusionParams };
 
 export default function DiffusionResults({ diffusionParams }: Props) {
   const [images, setImages] = React.useState<string[]>([]);
+  const [finished, setFinished] = React.useState<boolean>(false);
   const imageModalRef = React.useRef<ImageModalHandler>(null);
 
   console.log({ images });
@@ -30,8 +31,7 @@ export default function DiffusionResults({ diffusionParams }: Props) {
         }
       </h2>
       <DiffusionStyleSection
-        icon="💕"
-        title="Kawaii Style"
+        style="kawaii"
         diffusionParams={diffusionParams}
         prompts={KAWAII_PROMPTS}
         onImageClicked={(image) => setModalImage(image)}
@@ -39,7 +39,7 @@ export default function DiffusionResults({ diffusionParams }: Props) {
       />
       {/* <DiffusionStyleSection
         icon="💥"
-        title="Shonen Style"
+        style="shonen"
         diffusionParams={diffusionParams}
         prompts={SHONEN_PROMPTS}
         onImageClicked={(image) => setModalImage(image)}
@@ -47,7 +47,7 @@ export default function DiffusionResults({ diffusionParams }: Props) {
       />
       <DiffusionStyleSection
         icon="🌀"
-        title="Naruto Style"
+        style="naruto"
         diffusionParams={diffusionParams}
         prompts={NARUTO_PROMPTS}
         onImageClicked={(image) => setModalImage(image)}
