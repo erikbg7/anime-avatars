@@ -33,19 +33,41 @@ const statusDiffusionInputSchema = z.object({ jobId: z.string() });
 
 type DiffusionStatusOutput = z.infer<typeof statusDiffusionOutputSchema>;
 const statusDiffusionOutputSchema = z.object({
-  id: z.string().optional(),
-  delayTime: z.number().optional(),
-  executionTime: z.number().optional(),
   status: diffusionStatusSchema,
-  input: runDiffusionInputSchema,
-  output: z.array(diffusionResultImageSchema).optional(),
+  image: z.string().optional(),
 });
 
+const createJobsSchemaInput = z.object({
+  genre: z.string(),
+  baseUrl: z.string(),
+  customer_id: z.string(),
+});
+const createJobsSchemaOutput = z.object({
+  genre: z.string(),
+  baseUrl: z.string(),
+  customer_id: z.string(),
+});
+
+type DiffusionStyle = z.infer<typeof diffusionStyleSchema>;
+const diffusionStyleSchema = z.enum(['kawaii', 'shonen', 'naruto']);
+
+const diffusionSchema = z.object({
+  job_id: z.string(),
+  customer_id: z.string(),
+  style: diffusionStyleSchema,
+  url: z.string().url().optional(),
+  status: diffusionStatusSchema,
+});
+
+const diffusionRetrieveOutput = z.array(diffusionSchema.pick({ job_id: true, style: true }));
+
 export {
+  createJobsSchemaInput,
   interrogateInputSchema,
   interrogateOutputSchema,
   diffusionStatusSchema,
   diffusionResultImageSchema,
+  diffusionRetrieveOutput,
   runDiffusionInputSchema,
   runDiffusionOutputSchema,
   statusDiffusionInputSchema,
@@ -53,6 +75,7 @@ export {
 };
 
 export type {
+  DiffusionStyle,
   DiffusionResultImage,
   DiffusionRunInput,
   DiffusionRunOutput,

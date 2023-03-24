@@ -1,14 +1,14 @@
 import { DiffusionRunInput } from '@/server/services/diffusion/types';
 
 export const buildImagePrompt = (
-  prompt: DiffusionRunInput['diffusion'],
+  config: DiffusionRunInput['diffusion'],
   genre: string,
   url: string
 ) => {
   return {
-    ...prompt,
+    ...config,
     init_image: url,
-    prompt: prompt.prompt.replace('{genre}', genre),
+    prompt: config.prompt.replace('{genre}', genre),
   };
 };
 
@@ -86,3 +86,28 @@ export const MECHA: DiffusionRunInput['diffusion'][] = [
       '((((nude)))), (naked), ((((ugly)))), (((duplicate))), ((morbid)), ((mutilated)), [out of frame], extra fingers, mutated hands, ((poorly drawn hands)), ((poorly drawn face)), (((mutation))), (((deformed))), ((ugly)), blurry, ((bad anatomy)), (((bad proportions))), ((extra limbs)), cloned face, (((disfigured))). out of frame, ugly, extra limbs, (bad anatomy), gross proportions, (malformed limbs), ((missing arms)), ((missing legs)), (((extra arms))), (((extra legs))), mutated hands, (fused fingers), (too many fingers), (((long neck)))',
   },
 ];
+
+// const buildPrompt = (
+//   cfg: DiffusionRunInput['guidance_scale'],
+//   strength: DiffusionRunInput['prompt_strength'],
+//   scheduler: DiffusionRunInput['scheduler'],
+//   steps?: DiffusionRunInput['num_inference_steps']
+// ) => {
+//   return {
+//     prompt:
+//       'portrait of Cyberpunk samurai chibi {genre}, cinematic lighting, horror, ultra detail, ultra realistic, photo realistic',
+//     prompt_strength: strength,
+//     num_inference_steps: steps || 40,
+//     guidance_scale: cfg,
+//     scheduler: scheduler,
+//     negative_prompt:
+//       'nsfw, nude, naked, (ugly:1.3), (fused fingers), (too many fingers), (bad anatomy:1.5), (watermark:1.5), (words), letters, untracked eyes, asymmetric eyes, floating head, (logo:1.5), (bad hands:1.3), (mangled hands:1.2), (missing hands), (missing arms), backward hands, floating jewelry, unattached jewelry, floating head, doubled head, unattached head, doubled head, head in body, (misshapen body:1.1), (badly fitted headwear:1.2), floating arms, (too many arms:1.5), limbs fused with body, (facial blemish:1.5), badly fitted clothes, imperfect eyes, untracked eyes, crossed eyes, hair growing from clothes, partial faces, hair not attached to head',
+//   };
+// };
+
+// const gridPrompts: DiffusionRunInput[] = [
+//   buildPrompt(10, 0.85, 'EULER-A', 20),
+//   buildPrompt(10, 0.85, 'EULER-A', 30),
+//   buildPrompt(10, 0.85, 'EULER-A', 40),
+//   buildPrompt(10, 0.85, 'EULER-A', 50),
+// ];

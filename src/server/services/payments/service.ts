@@ -13,35 +13,22 @@ export function createPaymentsService() {
       .query(async ({ ctx, input }) => {
         console.log('RETRIEVE');
         const { stripe } = ctx;
-        let isDiffusionDone = true;
         const session = await stripe.checkout.sessions.retrieve(input.sessionId);
 
         const id = input.sessionId;
-        const email = session.customer_details?.email;
+        const email = session.customer_details?.email!;
 
-        const { data: newCustomer, error } = await ctx.supabase
+        const { data, error } = await ctx.supabase
           .from('customers')
-          .insert([{ id, email }])
+          .upsert([{ id, email }])
           .select('*')
           .single();
 
         if (error) {
-          const { data, error } = await ctx.supabase
-            .from('customers')
-            .select('*')
-            .eq('id', id)
-            .single();
-
-          if (error) {
-            throw new Error(error.message);
-          }
-
-          isDiffusionDone = data.dispatched;
-        } else {
-          isDiffusionDone = newCustomer.dispatched;
+          throw new Error(error.message);
         }
 
-        return { isDiffusionDone };
+        return { isDiffusionDone: data.dispatched };
       }),
     purchase: procedure.mutation(async ({ ctx }) => {
       const { stripe } = ctx;

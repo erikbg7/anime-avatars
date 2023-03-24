@@ -1,8 +1,7 @@
 import React from 'react';
 import { trpc } from '@/utils/trpc';
 import { createClient } from '@supabase/supabase-js';
-import { DiffusionParams } from '@/pages/payment/[sessionId]';
-import Layout from '@/components/PageLayout';
+import { useRouter } from 'next/router';
 import GenreInput, { GenreInputHandler } from './GenreInput';
 import { getStorageParams } from '@/utils/upload';
 import ImagePreview, { ImagePreviewHandler } from './ImagePreview';
@@ -17,15 +16,19 @@ const STEPS = {
 type StepKey = keyof typeof STEPS;
 type Step = (typeof STEPS)[StepKey];
 
-type Props = { session_id: string; setDiffusionParams: (params: DiffusionParams) => void };
+type Props = { session_id: string };
 
-function DiffusionSteps({ session_id, setDiffusionParams }: Props) {
+function DiffusionSteps({ session_id }: Props) {
+  const router = useRouter();
   const [step, setStep] = React.useState<Step>(STEPS.UPLOAD);
   const [loading, setLoading] = React.useState<boolean>(false);
   const genreInputRef = React.useRef<GenreInputHandler>(null);
   const imagePreviewRef = React.useRef<ImagePreviewHandler>(null);
 
   const getToken = trpc.storage.getUploadToken.useMutation();
+
+  const onSuccess = () => router.push('/results/'.concat(session_id));
+  const createDiffusions = trpc.diffusion.createJobs.useMutation({ onSuccess });
 
   const handlePreviewChange = (previewContent: string | File) => {
     imagePreviewRef.current?.setContent(previewContent);
@@ -37,9 +40,6 @@ function DiffusionSteps({ session_id, setDiffusionParams }: Props) {
     const content = imagePreviewRef.current?.getContent();
 
     if (!content || !genre) return;
-
-    // const diffusionParams = {}
-    // const a = new URLSearchParams({diffusion: })
 
     setLoading(true);
 
@@ -53,7 +53,11 @@ function DiffusionSteps({ session_id, setDiffusionParams }: Props) {
     const { data, error } = await supabase.storage.from('images').createSignedUrl(path, 3600);
 
     if (!error) {
-      setDiffusionParams({ url: data.signedUrl, genre });
+      await createDiffusions.mutateAsync({
+        genre: genre,
+        baseUrl: data.signedUrl,
+        customer_id: session_id,
+      });
     }
 
     setLoading(false);
